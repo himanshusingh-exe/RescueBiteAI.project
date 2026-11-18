@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Donation History — RescueBite AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* ============================= */
+  /* DESIGN TOKENS (matches source) */
+  /* ============================= */
+  :root {
+    --font-sans: 'Inter', sans-serif;
+    --font-display: 'Plus Jakarta Sans', sans-serif;
+
+    --color-emerald-50: #ecfdf5;
+    --color-emerald-100: #d1fae5;
+    --color-emerald-200: #a7f3d0;
+    --color-emerald-300: #6ee7b7;
+    --color-emerald-500: #10b981;
+    --color-emerald-600: #059669;
+    --color-emerald-700: #047857;
+    --color-emerald-800: #065f46;
+    --color-emerald-900: #064e3b;
+
+    --color-orange-50: #fff7ed;
+    --color-orange-100: #ffedd5;
+    --color-orange-400: #fb923c;
+    --color-orange-500: #f97316;
+    --color-orange-600: #ea580c;
+    --color-orange-800: #9a3412;
+
+    --color-slate-50: #f8fafc;
+    --color-slate-100: #f1f5f9;
+    --color-slate-200: #e2e8f0;
+    --color-slate-300: #cbd5e1;
+    --color-slate-400: #94a3b8;
+    --color-slate-500: #64748b;
+    --color-slate-600: #475569;
+    --color-slate-700: #334155;
+    --color-slate-800: #1e293b;
+    --color-slate-900: #0f172a;
+
+    --color-sky-50: #f0f9ff;
+    --color-sky-100: #e0f2fe;
+    --color-sky-600: #0284c7;
+    --color-sky-700: #0369a1;
+
+    --color-violet-50: #f5f3ff;
+    --color-violet-100: #ede9fe;
+    --color-violet-600: #7c3aed;
+    --color-violet-700: #6d28d9;
+
+    --color-rose-50: #fff1f2;
+    --color-rose-100: #ffe4e6;
+    --color-rose-400: #fb7185;
+    --color-rose-500: #f43f5e;
+    --color-rose-700: #be123c;
+
+    --color-amber-50: #fffbeb;
+    --color-amber-100: #fef3c7;
+    --color-amber-500: #f59e0b;
+    --color-amber-600: #d97706;
+    --color-amber-700: #b45309;
+
+    --color-teal-50: #f0fdfa;
+    --color-teal-600: #0d9488;
+
+    --color-yellow-50: #fefce8;
+    --color-yellow-200: #fef08a;
+    --color-yellow-400: #facc15;
+    --color-yellow-800: #854d0e;
+
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: 1.25rem;
+    --space-6: 1.5rem;
+    --space-8: 2rem;
+    --space-10: 2.5rem;
+    --space-12: 3rem;
+    --space-14: 3.5rem;
+    --space-16: 4rem;
+    --space-20: 5rem;
+    --space-24: 6rem;
+
+    --text-xs: 0.75rem;
+    --text-sm: 0.875rem;
+    --text-base: 1rem;
+    --text-lg: 1.125rem;
+    --text-xl: 1.25rem;
+    --text-2xl: 1.5rem;
+    --text-3xl: 1.875rem;
+    --text-4xl: 2.25rem;
+    --text-5xl: 3rem;
+    --text-6xl: 3.75rem;
+
+    --radius-lg: 0.5rem;
+    --radius-xl: 0.75rem;
+    --radius-2xl: 1rem;
+    --radius-3xl: 1.5rem;
+    --radius-full: 9999px;
+
+    --max-w-7xl: 80rem;
+    --max-w-5xl: 64rem;
+    --max-w-2xl: 42rem;
+    --max-w-xl: 36rem;
+    --max-w-lg: 32rem;
+    --max-w-md: 28rem;
+    --max-w-xs: 20rem;
+  }
+
+  /* ============================= */
+  /* RESET / BASE                  */
+  /* ============================= */
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: var(--font-sans);
+    background: #ffffff;
+    color: var(--color-slate-900);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  img, svg { display: block; max-width: 100%; }
+  a { text-decoration: none; color: inherit; }
+  button { font-family: inherit; cursor: pointer; background: none; border: none; }
+  ul { list-style: none; margin: 0; padding: 0; }
+  h1, h2, h3, h4, p { margin: 0; }
+  input, textarea, select { font-family: inherit; }
+
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--color-emerald-100); border-radius: 3px; }
+
+  .icon { flex-shrink: 0; }
+
+  .container {
+    max-width: var(--max-w-7xl);
+    margin: 0 auto;
+    padding: 0 var(--space-6);
+  }
+
+  /* ============================= */
+  /* NAVBAR (identical to source)   */
+  /* ============================= */
+  .navbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 50;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05);
+    border-bottom: 1px solid var(--color-slate-100);
+  }
+  .navbar__inner {
+    max-width: var(--max-w-7xl);
+    margin: 0 auto;
+    padding: var(--space-4) var(--space-6);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .navbar__logo { display: flex; align-items: center; gap: 0.625rem; }
+  .navbar__logo-badge {
+    width: 2rem; height: 2rem;
+    border-radius: var(--radius-lg);
+    background: var(--color-emerald-600);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05);
+    transition: background-color 0.2s ease;
+  }
+  .navbar__logo:hover .navbar__logo-badge { background: var(--color-emerald-700); }
+  .navbar__logo-text { font-weight: 700; color: var(--color-slate-900); font-size: var(--text-lg); letter-spacing: -0.01em; }
+  .navbar__logo-text span { color: var(--color-emerald-600); }
+  .navbar__links { display: flex; align-items: center; gap: var(--space-8); }
+  .navbar__link { font-size: var(--text-sm); font-weight: 500; color: var(--color-slate-600); transition: color 0.2s ease; }
+  .navbar__link:hover, .navbar__link.is-active { color: var(--color-emerald-600); }
+  .navbar__cta { display: flex; align-items: center; gap: var(--space-3); }
+  .btn-login {
+    font-size: var(--text-sm); font-weight: 500; color: var(--color-slate-600);
+    padding: var(--space-2) var(--space-4); border-radius: var(--radius-lg); transition: all 0.2s ease;
+  }
+  .btn-login:hover { color: var(--color-slate-900); background: var(--color-slate-50); }
+  .btn-primary {
+    font-size: var(--text-sm); font-weight: 600; background: var(--color-emerald-600); color: #fff;
+    padding: var(--space-2) 1.25rem; border-radius: var(--radius-lg); transition: background-color 0.2s ease;
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05); display: inline-flex; align-items: center; gap: var(--space-2);
+  }
+  .btn-primary:hover { background: var(--color-emerald-700); }
+  .navbar__toggle { display: none; padding: var(--space-2); border-radius: var(--radius-lg); color: var(--color-slate-900); }
+  .navbar__toggle:hover { background: var(--color-slate-100); }
+  .navbar__mobile-menu {
+    display: none; background: #fff; border-top: 1px solid var(--color-slate-100);
+    padding: var(--space-4) var(--space-6); flex-direction: column; gap: var(--space-4);
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); max-height: 0; overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+  }
+  .navbar__mobile-menu.is-open { display: flex; max-height: 30rem; }
+  .navbar__mobile-link { font-size: var(--text-sm); font-weight: 500; color: var(--color-slate-700); padding: var(--space-1) 0; }
+  .navbar__mobile-link:hover { color: var(--color-emerald-600); }
+  .navbar__mobile-actions { display: flex; gap: var(--space-3); padding-top: var(--space-2); border-top: 1px solid var(--color-slate-100); }
+  .navbar__mobile-actions .btn-login { flex: 1; text-align: center; border: 1px solid var(--color-slate-200); }
+  .navbar__mobile-actions .btn-primary { flex: 1; text-align: center; justify-content: center; }
+
+  /* ============================= */
+  /* PAGE HEADER                   */
+  /* ============================= */
+  .page-header {
+    position: relative;
+    padding: 8.5rem 0 var(--space-10);
+    overflow: hidden;
+  }
+  .page-header__grid-bg {
+    position: absolute; inset: 0; opacity: 0.35;
+    background-image: radial-gradient(circle at center, var(--color-emerald-100) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+  .page-header__inner {
+    position: relative;
+    display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: var(--space-6);
+  }
+  .breadcrumb-pill {
+    display: inline-flex; align-items: center; gap: var(--space-2);
+    background: var(--color-emerald-50); border: 1px solid var(--color-emerald-100);
+    border-radius: var(--radius-full); padding: 0.375rem var(--space-4); margin-bottom: var(--space-4);
+  }
+  .breadcrumb-pill__text { font-size: var(--text-xs); font-weight: 600; color: var(--color-emerald-700); text-transform: uppercase; letter-spacing: 0.05em; }
+  .page-header__title {
+    font-family: var(--font-display); font-size: var(--text-4xl); font-weight: 800;
+    color: var(--color-slate-900); letter-spacing: -0.02em; margin-bottom: var(--space-3);
+  }
+  .page-header__desc { font-size: var(--text-base); color: var(--color-slate-500); line-height: 1.7; max-width: var(--max-w-md); }
+  .page-header__actions { display: flex; gap: var(--space-3); }
+  .btn-outline {
+    display: flex; align-items: center; gap: var(--space-2); color: var(--color-slate-700); font-weight: 600;
+    font-size: var(--text-sm); padding: 0.75rem var(--space-5); border-radius: var(--radius-xl);
+    border: 1px solid var(--color-slate-200); transition: all 0.2s ease; background: #fff;
+  }
+  .btn-outline:hover { color: var(--color-slate-900); border-color: var(--color-slate-300); background: var(--color-slate-50); }
+  .btn-cta-sm {
+    display: flex; align-items: center; gap: var(--space-2); background: var(--color-emerald-600); color: #fff;
+    font-weight: 600; font-size: var(--text-sm); padding: 0.75rem var(--space-5); border-radius: var(--radius-xl);
+    transition: all 0.2s ease; box-shadow: 0 10px 15px -3px rgba(167, 243, 208, 0.5);
+  }
+  .btn-cta-sm:hover { background: var(--color-emerald-700); transform: translateY(-2px); }
+
+  /* ============================= */
+  /* ANALYTICS                     */
+  /* ============================= */
+  .analytics { padding: var(--space-4) 0 var(--space-10); }
+  .analytics__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-5); }
+  .stat-card {
+    border-radius: var(--radius-2xl); padding: var(--space-6); border: 1px solid var(--color-slate-100);
+    background: #fff; transition: all 0.2s ease; box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05);
+  }
+  .stat-card:hover { box-shadow: 0 10px 15px -3px rgba(241,245,249,0.8); transform: translateY(-2px); }
+  .stat-card__top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: var(--space-4); }
+  .stat-card__icon {
+    width: 2.75rem; height: 2.75rem; border-radius: var(--radius-xl);
+    display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05);
+  }
+  .stat-card__trend { font-size: var(--text-xs); font-weight: 700; padding: 0.125rem var(--space-2); border-radius: var(--radius-full); }
+  .stat-card__value { font-size: var(--text-3xl); font-family: var(--font-display); font-weight: 800; color: var(--color-slate-900); margin-bottom: var(--space-1); }
+  .stat-card__label { font-size: var(--text-sm); font-weight: 600; color: var(--color-slate-600); }
+
+  /* ============================= */
+  /* TOOLBAR                       */
+  /* ============================= */
+  .history { padding: 0 0 var(--space-24); }
+  .toolbar {
+    background: #fff; border: 1px solid var(--color-slate-100); border-radius: var(--radius-3xl);
+    padding: var(--space-5) var(--space-6); box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05);
+    display: flex; align-items: flex-end; flex-wrap: wrap; gap: var(--space-4); margin-bottom: var(--space-6);
+  }
+  .toolbar__field { display: flex; flex-direction: column; gap: 0.375rem; }
+  .toolbar__field label { font-size: var(--text-xs); font-weight: 600; color: var(--color-slate-500); text-transform: uppercase; letter-spacing: 0.04em; }
+  .toolbar__search { flex: 1 1 240px; position: relative; }
+  .toolbar__search input {
+    width: 100%; border: 1px solid var(--color-slate-200); border-radius: var(--radius-xl);
+    padding: 0.625rem var(--space-4) 0.625rem 2.5rem; font-size: var(--text-sm); color: var(--color-slate-800); transition: all 0.2s ease;
+  }
+  .toolbar__search-icon { position: absolute; left: var(--space-3); top: 50%; transform: translateY(-50%); color: var(--color-slate-400); pointer-events: none; }
+  .toolbar input, .toolbar select {
+    border: 1px solid var(--color-slate-200); border-radius: var(--radius-xl);
+    padding: 0.625rem var(--space-4); font-size: var(--text-sm); color: var(--color-slate-800); transition: all 0.2s ease; background: #fff;
+  }
+  .toolbar input:focus, .toolbar select:focus {
+    outline: none; border-color: #34d399; box-shadow: 0 0 0 4px rgba(16,185,129,0.15);
+  }
+  .toolbar select { min-width: 9.5rem; cursor: pointer; }
+  .toolbar__dates { display: flex; align-items: center; gap: var(--space-2); }
+  .toolbar__dates span { color: var(--color-slate-300); font-size: var(--text-sm); }
+  .toolbar__dates input { min-width: 9rem; }
+  .toolbar__spacer { flex: 1; }
+  .toolbar__reset {
+    font-size: var(--text-sm); font-weight: 600; color: var(--color-slate-500);
+    padding: 0.625rem var(--space-3); border-radius: var(--radius-lg); transition: all 0.2s ease;
+  }
+  .toolbar__reset:hover { color: var(--color-rose-500); background: var(--color-rose-50); }
+
+  .view-toggle { display: flex; border: 1px solid var(--color-slate-200); border-radius: var(--radius-lg); overflow: hidden; }
+  .view-toggle button {
+    display: flex; align-items: center; gap: var(--space-2); padding: 0.625rem var(--space-4);
+    background: #fff; color: var(--color-slate-500); font-size: var(--text-sm); font-weight: 600; transition: all 0.2s ease;
+  }
+  .view-toggle button + button { border-left: 1px solid var(--color-slate-200); }
+  .view-toggle button.is-active { background: var(--color-emerald-600); color: #fff; }
+  .view-toggle button:not(.is-active):hover { background: var(--color-slate-50); color: var(--color-slate-800); }
+
+  .results-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-4); flex-wrap: wrap; gap: var(--space-3); }
+  .results-bar__count { font-size: var(--text-sm); color: var(--color-slate-500); }
+  .results-bar__count strong { color: var(--color-slate-900); font-weight: 700; }
+
+  /* ============================= */
+  /* STATUS BADGE                  */
+  /* ============================= */
+  .status-badge {
+    display: inline-flex; align-items: center; gap: 0.375rem; padding: 0.3125rem 0.75rem;
+    border-radius: var(--radius-full); font-size: var(--text-xs); font-weight: 700; white-space: nowrap;
+  }
+  .status-badge::before { content: ''; width: 6px; height: 6px; border-radius: var(--radius-full); background: currentColor; }
+  .status-badge--pending { background: var(--color-amber-50); color: var(--color-amber-700); border: 1px solid var(--color-amber-100); }
+  .status-badge--accepted { background: var(--color-sky-50); color: var(--color-sky-700); border: 1px solid var(--color-sky-100); }
+  .status-badge--delivered { background: var(--color-emerald-50); color: var(--color-emerald-700); border: 1px solid var(--color-emerald-100); }
+  .status-badge--cancelled { background: var(--color-rose-50); color: var(--color-rose-700); border: 1px solid var(--color-rose-100); }
+
+  /* ============================= */
+  /* TABLE VIEW                    */
+  /* ============================= */
+  .table-card {
+    background: #fff; border-radius: var(--radius-3xl); border: 1px solid var(--color-slate-100);
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05); overflow: hidden;
+  }
+  .table-scroll { overflow-x: auto; }
+  .donation-table { width: 100%; border-collapse: collapse; min-width: 860px; }
+  .donation-table thead th {
+    text-align: left; font-size: var(--text-xs); font-weight: 700; color: var(--color-slate-500);
+    text-transform: uppercase; letter-spacing: 0.05em; padding: var(--space-4) var(--space-6);
+    background: var(--color-slate-50); border-bottom: 1px solid var(--color-slate-100); white-space: nowrap;
+  }
+  .donation-table thead th.is-sortable { cursor: pointer; user-select: none; }
+  .donation-table thead th.is-sortable:hover { color: var(--color-emerald-700); }
+  .donation-table thead th .sort-arrow { display: inline-block; margin-left: 0.25rem; opacity: 0.4; font-size: 0.65rem; }
+  .donation-table thead th.is-sorted-asc .sort-arrow,
+  .donation-table thead th.is-sorted-desc .sort-arrow { opacity: 1; color: var(--color-emerald-600); }
+  .donation-table tbody td { padding: var(--space-4) var(--space-6); font-size: var(--text-sm); color: var(--color-slate-700); border-bottom: 1px solid var(--color-slate-50); vertical-align: middle; }
+  .donation-table tbody tr:last-child td { border-bottom: none; }
+  .donation-table tbody tr:hover { background: rgba(248,250,252,0.6); }
+  .donation-table__id { font-weight: 700; color: var(--color-slate-900); font-family: var(--font-display); }
+  .donation-table__food { display: flex; align-items: center; gap: var(--space-3); }
+  .donation-table__food-emoji {
+    width: 2.25rem; height: 2.25rem; border-radius: var(--radius-lg); background: var(--color-slate-50);
+    display: flex; align-items: center; justify-content: center; font-size: var(--text-lg); flex-shrink: 0;
+  }
+  .donation-table__food-name { font-weight: 600; color: var(--color-slate-900); }
+  .donation-table__food-cat { font-size: var(--text-xs); color: var(--color-slate-400); }
+  .donation-table__ngo-name { font-weight: 500; color: var(--color-slate-800); }
+  .donation-table__ngo-dist { font-size: var(--text-xs); color: var(--color-slate-400); }
+  .donation-table__action {
+    width: 2.25rem; height: 2.25rem; border-radius: var(--radius-lg); display: inline-flex;
+    align-items: center; justify-content: center; color: var(--color-slate-400); transition: all 0.2s ease;
+  }
+  .donation-table__action:hover { background: var(--color-emerald-50); color: var(--color-emerald-600); }
+
+  /* ============================= */
+  /* CARD VIEW                     */
+  /* ============================= */
+  .cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-5); }
+  .donation-card {
+    background: #fff; border: 1px solid var(--color-slate-100); border-radius: var(--radius-2xl);
+    padding: var(--space-6); transition: all 0.2s ease; display: flex; flex-direction: column; gap: var(--space-4);
+  }
+  .donation-card:hover { box-shadow: 0 10px 15px -3px rgba(241,245,249,0.8); transform: translateY(-4px); }
+  .donation-card__top { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-3); }
+  .donation-card__food { display: flex; align-items: center; gap: var(--space-3); }
+  .donation-card__emoji {
+    width: 2.75rem; height: 2.75rem; border-radius: var(--radius-xl); background: var(--color-slate-50);
+    display: flex; align-items: center; justify-content: center; font-size: var(--text-xl); flex-shrink: 0;
+  }
+  .donation-card__title { font-size: var(--text-sm); font-weight: 700; color: var(--color-slate-900); line-height: 1.3; }
+  .donation-card__cat { font-size: var(--text-xs); color: var(--color-slate-400); margin-top: 0.125rem; }
+  .donation-card__id { font-size: var(--text-xs); color: var(--color-slate-300); font-weight: 700; }
+  .donation-card__meta { display: flex; flex-direction: column; gap: var(--space-2); padding-top: var(--space-2); border-top: 1px dashed var(--color-slate-100); }
+  .donation-card__meta-row { display: flex; align-items: center; justify-content: space-between; font-size: var(--text-xs); }
+  .donation-card__meta-label { color: var(--color-slate-400); display: flex; align-items: center; gap: 0.375rem; }
+  .donation-card__meta-value { color: var(--color-slate-700); font-weight: 600; }
+  .donation-card__footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: var(--space-2); }
+  .donation-card__link { font-size: var(--text-xs); font-weight: 700; color: var(--color-emerald-600); display: flex; align-items: center; gap: 0.25rem; }
+  .donation-card__link:hover { color: var(--color-emerald-700); }
+
+  /* ============================= */
+  /* EMPTY STATE                   */
+  /* ============================= */
+  .empty-state { display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: var(--space-16) var(--space-6); background: #fff; border: 1px solid var(--color-slate-100); border-radius: var(--radius-3xl); }
+  .empty-state.is-visible { display: flex; }
+  .empty-state__icon {
+    width: 3.5rem; height: 3.5rem; border-radius: var(--radius-full); background: var(--color-slate-50);
+    display: flex; align-items: center; justify-content: center; margin-bottom: var(--space-4); color: var(--color-slate-300);
+  }
+  .empty-state__title { font-size: var(--text-lg); font-weight: 700; color: var(--color-slate-800); margin-bottom: var(--space-2); }
+  .empty-state__desc { font-size: var(--text-sm); color: var(--color-slate-400); max-width: 24rem; }
+
+  /* ============================= */
+  /* PAGINATION                    */
+  /* ============================= */
+  .pagination { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--space-4); margin-top: var(--space-6); }
+  .pagination__info { font-size: var(--text-sm); color: var(--color-slate-500); }
+  .pagination__pages { display: flex; align-items: center; gap: 0.375rem; }
+  .pagination__btn {
+    min-width: 2.25rem; height: 2.25rem; padding: 0 0.5rem; border-radius: var(--radius-lg);
+    border: 1px solid var(--color-slate-200); font-size: var(--text-sm); font-weight: 600; color: var(--color-slate-600);
+    background: #fff; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s ease;
+  }
+  .pagination__btn:hover:not(:disabled):not(.is-active) { border-color: var(--color-slate-300); background: var(--color-slate-50); }
+  .pagination__btn.is-active { background: var(--color-emerald-600); border-color: var(--color-emerald-600); color: #fff; }
+  .pagination__btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .pagination__ellipsis { color: var(--color-slate-300); font-size: var(--text-sm); padding: 0 0.25rem; }
+
+  /* ============================= */
+  /* FOOTER (identical to source)  */
+  /* ============================= */
+  .footer { background: var(--color-slate-900); color: #fff; padding-top: var(--space-16); padding-bottom: var(--space-8); }
+  .footer__top { display: grid; grid-template-columns: repeat(6, 1fr); gap: var(--space-8); padding-bottom: var(--space-12); border-bottom: 1px solid #1e293b; }
+  .footer__brand { grid-column: span 2 / span 2; }
+  .footer__brand-logo { display: flex; align-items: center; gap: 0.625rem; margin-bottom: var(--space-4); }
+  .footer__brand-badge { width: 2rem; height: 2rem; border-radius: var(--radius-lg); background: var(--color-emerald-600); display: flex; align-items: center; justify-content: center; }
+  .footer__brand-text { font-weight: 700; font-size: var(--text-lg); letter-spacing: -0.01em; }
+  .footer__brand-text span { color: #34d399; }
+  .footer__brand-desc { font-size: var(--text-sm); color: var(--color-slate-400); line-height: 1.6; margin-bottom: var(--space-6); max-width: var(--max-w-xs); }
+  .footer__social { display: flex; gap: var(--space-3); }
+  .footer__social-btn { width: 2.25rem; height: 2.25rem; border-radius: var(--radius-lg); background: #1e293b; display: flex; align-items: center; justify-content: center; color: var(--color-slate-400); transition: background-color 0.2s ease; }
+  .footer__social-btn:hover { background: #334155; }
+  .footer__col-title { font-size: var(--text-xs); font-weight: 600; color: var(--color-slate-500); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: var(--space-4); }
+  .footer__col-list { display: flex; flex-direction: column; gap: 0.625rem; }
+  .footer__col-link { font-size: var(--text-sm); color: var(--color-slate-400); transition: color 0.2s ease; }
+  .footer__col-link:hover { color: #fff; }
+  .footer__bottom { padding-top: var(--space-8); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--space-4); }
+  .footer__copyright { font-size: var(--text-xs); color: var(--color-slate-500); margin: 0; }
+  .footer__credit { font-size: var(--text-xs); color: var(--color-slate-500); display: flex; align-items: center; gap: 0.375rem; }
+  .footer__credit .accent { color: var(--color-emerald-400, #34d399); }
+
+  /* ============================= */
+  /* RESPONSIVE                    */
+  /* ============================= */
+  @media (max-width: 1024px) {
+    .analytics__grid { grid-template-columns: repeat(2, 1fr); }
+    .cards-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 768px) {
+    .navbar__links, .navbar__cta { display: none; }
+    .navbar__toggle { display: flex; }
+    .page-header { padding: 7rem 0 var(--space-6); }
+    .page-header__title { font-size: var(--text-3xl); }
+    .page-header__inner { align-items: flex-start; }
+    .analytics__grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-4); }
+    .cards-grid { grid-template-columns: 1fr; }
+    .toolbar { flex-direction: column; align-items: stretch; }
+    .toolbar__dates { flex-wrap: wrap; }
+    .toolbar select, .toolbar__dates input { width: 100%; }
+    .view-toggle { align-self: flex-start; }
+    .footer__top { grid-template-columns: 1fr 1fr; gap: var(--space-6); }
+    .footer__brand { grid-column: span 2 / span 2; }
+    .footer__bottom { flex-direction: column; align-items: flex-start; }
+    .donation-table { min-width: 720px; }
+  }
+  @media (max-width: 480px) {
+    .analytics__grid { grid-template-columns: 1fr; }
+    .page-header__actions { width: 100%; }
+    .page-header__actions button { flex: 1; justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================= -->
+<!-- NAVBAR                        -->
+<!-- ============================= -->
+<header class="navbar navbar--scrolled" id="navbar">
+  <div class="navbar__inner">
+    <a href="rescuebite-ai-landing.html" class="navbar__logo">
+      <div class="navbar__logo-badge">
+        <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+      </div>
+      <span class="navbar__logo-text">RescueBite<span> AI</span></span>
+    </a>
+
+    <nav class="navbar__links">
+      <a href="rescuebite-ai-landing.html#home" class="navbar__link">Home</a>
+      <a href="#" class="navbar__link">Dashboard</a>
+      <a href="#" class="navbar__link is-active">Donation History</a>
+      <a href="rescuebite-ai-landing.html#contact" class="navbar__link">Contact</a>
+    </nav>
+
+    <div class="navbar__cta">
+      <button class="btn-login">My Account</button>
+      <button class="btn-primary">
+        New Donation
+        <svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      </button>
+    </div>
+
+    <button class="navbar__toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mobileMenu">
+      <svg id="menuIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+      <svg id="closeIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+
+  <div class="navbar__mobile-menu" id="mobileMenu">
+    <a href="rescuebite-ai-landing.html#home" class="navbar__mobile-link">Home</a>
+    <a href="#" class="navbar__mobile-link">Dashboard</a>
+    <a href="#" class="navbar__mobile-link">Donation History</a>
+    <a href="rescuebite-ai-landing.html#contact" class="navbar__mobile-link">Contact</a>
+    <div class="navbar__mobile-actions">
+      <button class="btn-login">My Account</button>
+      <button class="btn-primary">New Donation</button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- ============================= -->
+  <!-- PAGE HEADER                   -->
+  <!-- ============================= -->
+  <section class="page-header">
+    <div class="page-header__grid-bg" aria-hidden="true"></div>
+    <div class="container">
+      <div class="page-header__inner">
+        <div>
+          <div class="breadcrumb-pill">
+            <span class="breadcrumb-pill__text">Restaurant Dashboard</span>
+          </div>
+          <h1 class="page-header__title">Donation History</h1>
+          <p class="page-header__desc">Track every rescued meal — from pickup request to final delivery — across all your donation partners.</p>
+        </div>
+        <div class="page-header__actions">
+          <button class="btn-outline" id="exportBtn">
+            <svg class="icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export CSV
+          </button>
+          <button class="btn-cta-sm">
+            <svg class="icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            New Donation
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= -->
+  <!-- ANALYTICS                     -->
+  <!-- ============================= -->
+  <section class="analytics">
+    <div class="container">
+      <div class="analytics__grid">
+        <div class="stat-card">
+          <div class="stat-card__top">
+            <div class="stat-card__icon" style="background: var(--color-emerald-50);">
+              <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+            </div>
+            <span class="stat-card__trend" style="background:var(--color-emerald-50); color:var(--color-emerald-700);">+12%</span>
+          </div>
+          <div class="stat-card__value" id="statTotal">0</div>
+          <div class="stat-card__label">Total Donations</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-card__top">
+            <div class="stat-card__icon" style="background: var(--color-sky-50);">
+              <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <span class="stat-card__trend" style="background:var(--color-sky-50); color:var(--color-sky-700);">Live</span>
+          </div>
+          <div class="stat-card__value" id="statAccepted">0</div>
+          <div class="stat-card__label">Accepted / In Transit</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-card__top">
+            <div class="stat-card__icon" style="background: var(--color-amber-50);">
+              <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            </div>
+            <span class="stat-card__trend" style="background:var(--color-amber-50); color:var(--color-amber-700);">Pending</span>
+          </div>
+          <div class="stat-card__value" id="statPending">0</div>
+          <div class="stat-card__label">Awaiting Pickup</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-card__top">
+            <div class="stat-card__icon" style="background: var(--color-rose-50);">
+              <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f43f5e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+            </div>
+            <span class="stat-card__trend" style="background:var(--color-rose-50); color:var(--color-rose-700);">-3%</span>
+          </div>
+          <div class="stat-card__value" id="statCancelled">0</div>
+          <div class="stat-card__label">Cancelled</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= -->
+  <!-- DONATION HISTORY               -->
+  <!-- ============================= -->
+  <section class="history">
+    <div class="container">
+
+      <!-- Toolbar -->
+      <div class="toolbar">
+        <div class="toolbar__field toolbar__search">
+          <label for="searchInput">Search</label>
+          <div style="position:relative;">
+            <svg class="toolbar__search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="searchInput" placeholder="Search food, NGO or donation ID…">
+          </div>
+        </div>
+
+        <div class="toolbar__field">
+          <label for="statusFilter">Status</label>
+          <select id="statusFilter">
+            <option value="all">All Statuses</option>
+            <option value="pending">Pending</option>
+            <option value="accepted">Accepted</option>
+            <option value="delivered">Delivered</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </div>
+
+        <div class="toolbar__field">
+          <label>Date Range</label>
+          <div class="toolbar__dates">
+            <input type="date" id="dateFrom">
+            <span>to</span>
+            <input type="date" id="dateTo">
+          </div>
+        </div>
+
+        <div class="toolbar__field">
+          <label for="sortSelect">Sort By</label>
+          <select id="sortSelect">
+            <option value="date-desc">Newest First</option>
+            <option value="date-asc">Oldest First</option>
+            <option value="servings-desc">Servings (High–Low)</option>
+            <option value="servings-asc">Servings (Low–High)</option>
+            <option value="status">Status</option>
+          </select>
+        </div>
+
+        <button class="toolbar__reset" id="resetBtn">Reset Filters</button>
+
+        <div class="toolbar__spacer"></div>
+
+        <div class="toolbar__field">
+          <label>View</label>
+          <div class="view-toggle" id="viewToggle">
+            <button type="button" class="is-active" data-view="table">
+              <svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+              Table
+            </button>
+            <button type="button" data-view="cards">
+              <svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+              Cards
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results count -->
+      <div class="results-bar">
+        <p class="results-bar__count">Showing <strong id="resultCount">0</strong> of <strong id="totalCount">0</strong> donations</p>
+      </div>
+
+      <!-- Table view -->
+      <div class="table-card" id="tableView">
+        <div class="table-scroll">
+          <table class="donation-table">
+            <thead>
+              <tr>
+                <th class="is-sortable" data-sort="id">Donation ID <span class="sort-arrow">▲▼</span></th>
+                <th>Food Item</th>
+                <th class="is-sortable" data-sort="servings">Servings <span class="sort-arrow">▲▼</span></th>
+                <th>NGO / Recipient</th>
+                <th class="is-sortable is-sorted-desc" data-sort="date">Date <span class="sort-arrow">▲▼</span></th>
+                <th class="is-sortable" data-sort="status">Status <span class="sort-arrow">▲▼</span></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Card view -->
+      <div class="cards-grid" id="cardsView" style="display:none;"></div>
+
+      <!-- Empty state -->
+      <div class="empty-state" id="emptyState">
+        <div class="empty-state__icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </div>
+        <h3 class="empty-state__title">No donations found</h3>
+        <p class="empty-state__desc">Try adjusting your search, status filter, or date range to find what you're looking for.</p>
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination" id="pagination"></div>
+
+    </div>
+  </section>
+
+</main>
+
+<!-- ============================= -->
+<!-- FOOTER (identical to source)  -->
+<!-- ============================= -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <div class="footer__brand-logo">
+          <div class="footer__brand-badge">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+          </div>
+          <span class="footer__brand-text">RescueBite<span> AI</span></span>
+        </div>
+        <p class="footer__brand-desc">Using artificial intelligence to eliminate food waste and feed communities — one rescued meal at a time.</p>
+        <div class="footer__social">
+          <button class="footer__social-btn" aria-label="Twitter">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </button>
+          <button class="footer__social-btn" aria-label="GitHub">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/></svg>
+          </button>
+          <button class="footer__social-btn" aria-label="LinkedIn">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="footer__col">
+        <h4 class="footer__col-title">Platform</h4>
+        <ul class="footer__col-list">
+          <li><a href="rescuebite-ai-landing.html#features" class="footer__col-link">Features</a></li>
+          <li><a href="rescuebite-ai-landing.html#home" class="footer__col-link">How It Works</a></li>
+          <li><a href="#" class="footer__col-link">Donation History</a></li>
+          <li><a href="rescuebite-ai-landing.html#about" class="footer__col-link">SDG Impact</a></li>
+        </ul>
+      </div>
+
+      <div class="footer__col">
+        <h4 class="footer__col-title">Organization</h4>
+        <ul class="footer__col-list">
+          <li><a href="#" class="footer__col-link">About</a></li>
+          <li><a href="#" class="footer__col-link">Blog</a></li>
+          <li><a href="#" class="footer__col-link">Careers</a></li>
+          <li><a href="#" class="footer__col-link">Press</a></li>
+        </ul>
+      </div>
+
+      <div class="footer__col">
+        <h4 class="footer__col-title">Partners</h4>
+        <ul class="footer__col-list">
+          <li><a href="#" class="footer__col-link">For Restaurants</a></li>
+          <li><a href="#" class="footer__col-link">For NGOs</a></li>
+          <li><a href="#" class="footer__col-link">API Access</a></li>
+          <li><a href="#" class="footer__col-link">Municipalities</a></li>
+        </ul>
+      </div>
+
+      <div class="footer__col">
+        <h4 class="footer__col-title">Legal</h4>
+        <ul class="footer__col-list">
+          <li><a href="#" class="footer__col-link">Privacy Policy</a></li>
+          <li><a href="#" class="footer__col-link">Terms of Service</a></li>
+          <li><a href="#" class="footer__col-link">Cookie Policy</a></li>
+          <li><a href="#" class="footer__col-link">Accessibility</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <p class="footer__copyright">© 2025 RescueBite AI. All rights reserved.</p>
+      <p class="footer__credit">
+        Built with
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="#f43f5e" stroke="#f43f5e"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+        for a sustainable future ·
+        <span class="accent">Final Year AI Engineering Project</span>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ---------- Mobile nav (same behavior as landing page) ---------- */
+  var navToggle = document.getElementById('navToggle');
+  var mobileMenu = document.getElementById('mobileMenu');
+  var menuIcon = document.getElementById('menuIcon');
+  var closeIcon = document.getElementById('closeIcon');
+  var isOpen = false;
+  function setMenu(open) {
+    isOpen = open;
+    navToggle.setAttribute('aria-expanded', String(open));
+    mobileMenu.classList.toggle('is-open', open);
+    menuIcon.style.display = open ? 'none' : 'block';
+    closeIcon.style.display = open ? 'block' : 'none';
+  }
+  navToggle.addEventListener('click', function () { setMenu(!isOpen); });
+
+  /* ---------- Sample donation dataset ---------- */
+  var FOODS = [
+    { name: 'Butter Chicken (Partial)', cat: 'Indian Curry', emoji: '🍛' },
+    { name: 'Mixed Vegetable Biryani', cat: 'Rice Dish', emoji: '🍚' },
+    { name: 'Fresh Baked Bread Loaves', cat: 'Bakery', emoji: '🍞' },
+    { name: 'Paneer Tikka Masala', cat: 'Indian Curry', emoji: '🍲' },
+    { name: 'Assorted Fresh Salads', cat: 'Produce', emoji: '🥗' },
+    { name: 'Vegetable Fried Rice', cat: 'Rice Dish', emoji: '🍚' },
+    { name: 'Chicken Tikka Wraps', cat: 'Fast Food', emoji: '🌯' },
+    { name: 'Dal Makhani (Bulk)', cat: 'Indian Curry', emoji: '🍛' },
+    { name: 'Assorted Pastries', cat: 'Bakery', emoji: '🥐' },
+    { name: 'Vegetable Soup Batch', cat: 'Soup', emoji: '🍜' },
+    { name: 'Grilled Sandwiches', cat: 'Fast Food', emoji: '🥪' },
+    { name: 'Fruit Platter Trays', cat: 'Produce', emoji: '🍎' },
+    { name: 'Masala Dosa Batch', cat: 'South Indian', emoji: '🫓' },
+    { name: 'Chole Bhature', cat: 'Indian Curry', emoji: '🍛' },
+    { name: 'Pizza Slices (Leftover)', cat: 'Fast Food', emoji: '🍕' }
+  ];
+  var NGOS = [
+    { name: 'City Food Bank', dist: '1.2 km' },
+    { name: 'Hope Shelter', dist: '0.8 km' },
+    { name: 'Community Kitchen', dist: '2.1 km' },
+    { name: 'Sunrise NGO Trust', dist: '3.4 km' },
+    { name: 'Anna Seva Foundation', dist: '1.7 km' },
+    { name: 'Helping Hands Society', dist: '2.9 km' },
+    { name: 'Grace Meal Mission', dist: '0.5 km' }
+  ];
+  var STATUSES = ['pending', 'accepted', 'delivered', 'cancelled'];
+
+  function pad(n) { return n < 10 ? '0' + n : '' + n; }
+  function randomDateWithin(daysBack) {
+    var d = new Date();
+    d.setDate(d.getDate() - Math.floor(Math.random() * daysBack));
+    return d;
+  }
+  function toISO(d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+  function toDisplay(d) {
+    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return months[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
+  }
+
+  var donations = [];
+  (function seed() {
+    var count = 42;
+    for (var i = 0; i < count; i++) {
+      var food = FOODS[i % FOODS.length];
+      var ngo = NGOS[Math.floor(Math.random() * NGOS.length)];
+      var status = STATUSES[Math.floor(Math.random() * STATUSES.length)];
+      var date = randomDateWithin(75);
+      donations.push({
+        id: 'RB-' + (2500 + i),
+        food: food.name,
+        cat: food.cat,
+        emoji: food.emoji,
+        servings: 8 + Math.floor(Math.random() * 60),
+        ngo: ngo.name,
+        dist: ngo.dist,
+        date: date,
+        dateISO: toISO(date),
+        status: status
+      });
+    }
+    donations.sort(function (a, b) { return b.date - a.date; });
+  })();
+
+  /* ---------- State ---------- */
+  var state = {
+    search: '',
+    status: 'all',
+    dateFrom: '',
+    dateTo: '',
+    sort: 'date-desc',
+    view: 'table',
+    page: 1,
+    pageSize: 8
+  };
+
+  var STATUS_LABEL = { pending: 'Pending', accepted: 'Accepted', delivered: 'Delivered', cancelled: 'Cancelled' };
+
+  function statusBadgeHTML(status) {
+    return '<span class="status-badge status-badge--' + status + '">' + STATUS_LABEL[status] + '</span>';
+  }
+
+  /* ---------- Filtering / sorting ---------- */
+  function getFiltered() {
+    var q = state.search.trim().toLowerCase();
+    var list = donations.filter(function (d) {
+      if (state.status !== 'all' && d.status !== state.status) return false;
+      if (state.dateFrom && d.dateISO < state.dateFrom) return false;
+      if (state.dateTo && d.dateISO > state.dateTo) return false;
+      if (q) {
+        var haystack = (d.food + ' ' + d.ngo + ' ' + d.id + ' ' + d.cat).toLowerCase();
+        if (haystack.indexOf(q) === -1) return false;
+      }
+      return true;
+    });
+
+    list.sort(function (a, b) {
+      switch (state.sort) {
+        case 'date-asc': return a.date - b.date;
+        case 'servings-desc': return b.servings - a.servings;
+        case 'servings-asc': return a.servings - b.servings;
+        case 'status': return a.status.localeCompare(b.status);
+        case 'date-desc':
+        default: return b.date - a.date;
+      }
+    });
+    return list;
+  }
+
+  /* ---------- Render ---------- */
+  function renderStats() {
+    document.getElementById('statTotal').textContent = donations.length;
+    document.getElementById('statAccepted').textContent = donations.filter(function (d) { return d.status === 'accepted'; }).length;
+    document.getElementById('statPending').textContent = donations.filter(function (d) { return d.status === 'pending'; }).length;
+    document.getElementById('statCancelled').textContent = donations.filter(function (d) { return d.status === 'cancelled'; }).length;
+  }
+
+  function renderTable(pageItems) {
+    var body = document.getElementById('tableBody');
+    body.innerHTML = pageItems.map(function (d) {
+      return '' +
+        '<tr>' +
+          '<td class="donation-table__id">' + d.id + '</td>' +
+          '<td><div class="donation-table__food">' +
+            '<div class="donation-table__food-emoji">' + d.emoji + '</div>' +
+            '<div><div class="donation-table__food-name">' + d.food + '</div><div class="donation-table__food-cat">' + d.cat + '</div></div>' +
+          '</div></td>' +
+          '<td>' + d.servings + ' servings</td>' +
+          '<td><div class="donation-table__ngo-name">' + d.ngo + '</div><div class="donation-table__ngo-dist">' + d.dist + ' away</div></td>' +
+          '<td>' + toDisplay(d.date) + '</td>' +
+          '<td>' + statusBadgeHTML(d.status) + '</td>' +
+          '<td><button class="donation-table__action" aria-label="View donation details">' +
+            '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg>' +
+          '</button></td>' +
+        '</tr>';
+    }).join('');
+  }
+
+  function renderCards(pageItems) {
+    var wrap = document.getElementById('cardsView');
+    wrap.innerHTML = pageItems.map(function (d) {
+      return '' +
+        '<div class="donation-card">' +
+          '<div class="donation-card__top">' +
+            '<div class="donation-card__food">' +
+              '<div class="donation-card__emoji">' + d.emoji + '</div>' +
+              '<div><div class="donation-card__title">' + d.food + '</div><div class="donation-card__cat">' + d.cat + '</div></div>' +
+            '</div>' +
+            statusBadgeHTML(d.status) +
+          '</div>' +
+          '<div class="donation-card__meta">' +
+            '<div class="donation-card__meta-row"><span class="donation-card__meta-label">Donation ID</span><span class="donation-card__meta-value">' + d.id + '</span></div>' +
+            '<div class="donation-card__meta-row"><span class="donation-card__meta-label">Servings</span><span class="donation-card__meta-value">' + d.servings + '</span></div>' +
+            '<div class="donation-card__meta-row"><span class="donation-card__meta-label">Recipient</span><span class="donation-card__meta-value">' + d.ngo + '</span></div>' +
+            '<div class="donation-card__meta-row"><span class="donation-card__meta-label">Distance</span><span class="donation-card__meta-value">' + d.dist + '</span></div>' +
+            '<div class="donation-card__meta-row"><span class="donation-card__meta-label">Date</span><span class="donation-card__meta-value">' + toDisplay(d.date) + '</span></div>' +
+          '</div>' +
+          '<div class="donation-card__footer">' +
+            '<span class="donation-card__id">#' + d.id + '</span>' +
+            '<a href="#" class="donation-card__link">View details ' +
+              '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>' +
+            '</a>' +
+          '</div>' +
+        '</div>';
+    }).join('');
+  }
+
+  function renderPagination(totalItems, totalPages) {
+    var el = document.getElementById('pagination');
+    if (totalPages <= 1) { el.innerHTML = ''; return; }
+
+    var start = (state.page - 1) * state.pageSize + 1;
+    var end = Math.min(state.page * state.pageSize, totalItems);
+
+    var buttons = '';
+    buttons += '<button class="pagination__btn" id="prevPage" ' + (state.page === 1 ? 'disabled' : '') + ' aria-label="Previous page">‹</button>';
+
+    var maxButtons = 5;
+    var pages = [];
+    if (totalPages <= maxButtons) {
+      for (var i = 1; i <= totalPages; i++) pages.push(i);
+    } else {
+      pages.push(1);
+      var lo = Math.max(2, state.page - 1);
+      var hi = Math.min(totalPages - 1, state.page + 1);
+      if (lo > 2) pages.push('...');
+      for (var p = lo; p <= hi; p++) pages.push(p);
+      if (hi < totalPages - 1) pages.push('...');
+      pages.push(totalPages);
+    }
+
+    pages.forEach(function (p) {
+      if (p === '...') {
+        buttons += '<span class="pagination__ellipsis">…</span>';
+      } else {
+        buttons += '<button class="pagination__btn' + (p === state.page ? ' is-active' : '') + '" data-page="' + p + '">' + p + '</button>';
+      }
+    });
+
+    buttons += '<button class="pagination__btn" id="nextPage" ' + (state.page === totalPages ? 'disabled' : '') + ' aria-label="Next page">›</button>';
+
+    el.innerHTML =
+      '<p class="pagination__info">' + (totalItems ? ('Showing ' + start + '–' + end + ' of ' + totalItems) : '') + '</p>' +
+      '<div class="pagination__pages">' + buttons + '</div>';
+
+    var prev = document.getElementById('prevPage');
+    var next = document.getElementById('nextPage');
+    if (prev) prev.addEventListener('click', function () { state.page--; render(); });
+    if (next) next.addEventListener('click', function () { state.page++; render(); });
+    Array.prototype.forEach.call(el.querySelectorAll('[data-page]'), function (btn) {
+      btn.addEventListener('click', function () { state.page = parseInt(btn.getAttribute('data-page'), 10); render(); });
+    });
+  }
+
+  function render() {
+    var filtered = getFiltered();
+    var totalPages = Math.max(1, Math.ceil(filtered.length / state.pageSize));
+    if (state.page > totalPages) state.page = totalPages;
+    if (state.page < 1) state.page = 1;
+
+    var startIdx = (state.page - 1) * state.pageSize;
+    var pageItems = filtered.slice(startIdx, startIdx + state.pageSize);
+
+    document.getElementById('resultCount').textContent = filtered.length;
+    document.getElementById('totalCount').textContent = donations.length;
+
+    var tableView = document.getElementById('tableView');
+    var cardsView = document.getElementById('cardsView');
+    var emptyState = document.getElementById('emptyState');
+
+    if (filtered.length === 0) {
+      emptyState.classList.add('is-visible');
+      tableView.style.display = 'none';
+      cardsView.style.display = 'none';
+    } else {
+      emptyState.classList.remove('is-visible');
+      tableView.style.display = state.view === 'table' ? 'block' : 'none';
+      cardsView.style.display = state.view === 'cards' ? 'grid' : 'none';
+      if (state.view === 'table') renderTable(pageItems);
+      else renderCards(pageItems);
+    }
+
+    renderPagination(filtered.length, totalPages);
+  }
+
+  /* ---------- Sort-header sync with select ---------- */
+  var sortHeaderMap = { id: null, servings: 'servings', date: 'date', status: 'status' };
+  function syncSortHeaders() {
+    Array.prototype.forEach.call(document.querySelectorAll('.donation-table thead th.is-sortable'), function (th) {
+      th.classList.remove('is-sorted-asc', 'is-sorted-desc');
+      var key = th.getAttribute('data-sort');
+      if (state.sort === key + '-asc') th.classList.add('is-sorted-asc');
+      if (state.sort === key + '-desc') th.classList.add('is-sorted-desc');
+      if (state.sort === key && key === 'status') th.classList.add('is-sorted-asc');
+    });
+  }
+
+  /* ---------- Wire up controls ---------- */
+  var searchInput = document.getElementById('searchInput');
+  var statusFilter = document.getElementById('statusFilter');
+  var dateFrom = document.getElementById('dateFrom');
+  var dateTo = document.getElementById('dateTo');
+  var sortSelect = document.getElementById('sortSelect');
+  var viewToggle = document.getElementById('viewToggle');
+  var resetBtn = document.getElementById('resetBtn');
+
+  var searchDebounce;
+  searchInput.addEventListener('input', function () {
+    clearTimeout(searchDebounce);
+    var val = searchInput.value;
+    searchDebounce = setTimeout(function () {
+      state.search = val;
+      state.page = 1;
+      render();
+    }, 200);
+  });
+
+  statusFilter.addEventListener('change', function () { state.status = statusFilter.value; state.page = 1; render(); });
+  dateFrom.addEventListener('change', function () { state.dateFrom = dateFrom.value; state.page = 1; render(); });
+  dateTo.addEventListener('change', function () { state.dateTo = dateTo.value; state.page = 1; render(); });
+  sortSelect.addEventListener('change', function () { state.sort = sortSelect.value; state.page = 1; syncSortHeaders(); render(); });
+
+  viewToggle.addEventListener('click', function (e) {
+    var btn = e.target.closest('button[data-view]');
+    if (!btn) return;
+    state.view = btn.getAttribute('data-view');
+    Array.prototype.forEach.call(viewToggle.querySelectorAll('button'), function (b) { b.classList.toggle('is-active', b === btn); });
+    render();
+  });
+
+  document.querySelectorAll('.donation-table thead th.is-sortable').forEach(function (th) {
+    th.addEventListener('click', function () {
+      var key = th.getAttribute('data-sort');
+      if (key === 'status') {
+        state.sort = 'status';
+      } else if (state.sort === key + '-desc') {
+        state.sort = key + '-asc';
+      } else {
+        state.sort = key + '-desc';
+      }
+      sortSelect.value = (state.sort === 'status') ? 'status' : state.sort;
+      state.page = 1;
+      syncSortHeaders();
+      render();
+    });
+  });
+
+  resetBtn.addEventListener('click', function () {
+    state.search = ''; state.status = 'all'; state.dateFrom = ''; state.dateTo = '';
+    state.sort = 'date-desc'; state.page = 1;
+    searchInput.value = ''; statusFilter.value = 'all'; dateFrom.value = ''; dateTo.value = ''; sortSelect.value = 'date-desc';
+    syncSortHeaders();
+    render();
+  });
+
+  document.getElementById('exportBtn').addEventListener('click', function () {
+    var rows = [['Donation ID', 'Food Item', 'Category', 'Servings', 'NGO', 'Distance', 'Date', 'Status']];
+    getFiltered().forEach(function (d) {
+      rows.push([d.id, d.food, d.cat, d.servings, d.ngo, d.dist, d.dateISO, STATUS_LABEL[d.status]]);
+    });
+    var csv = rows.map(function (r) { return r.map(function (c) { return '"' + String(c).replace(/"/g, '""') + '"'; }).join(','); }).join('\n');
+    var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = 'donation-history.csv';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+
+  /* ---------- Init ---------- */
+  renderStats();
+  syncSortHeaders();
+  render();
+})();
+</script>
+
+</body>
+</html>

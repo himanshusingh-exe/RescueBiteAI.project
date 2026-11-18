@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Analysis Results — RescueBite AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* ============================= */
+  /* DESIGN TOKENS (shared)         */
+  /* ============================= */
+  :root {
+    --font-sans: 'Inter', sans-serif;
+    --font-display: 'Plus Jakarta Sans', sans-serif;
+
+    --color-emerald-50: #ecfdf5;
+    --color-emerald-100: #d1fae5;
+    --color-emerald-200: #a7f3d0;
+    --color-emerald-300: #6ee7b7;
+    --color-emerald-500: #10b981;
+    --color-emerald-600: #059669;
+    --color-emerald-700: #047857;
+    --color-emerald-800: #065f46;
+    --color-emerald-900: #064e3b;
+
+    --color-orange-50: #fff7ed;
+    --color-orange-100: #ffedd5;
+    --color-orange-400: #fb923c;
+    --color-orange-500: #f97316;
+    --color-orange-600: #ea580c;
+    --color-orange-800: #9a3412;
+
+    --color-slate-50: #f8fafc;
+    --color-slate-100: #f1f5f9;
+    --color-slate-200: #e2e8f0;
+    --color-slate-300: #cbd5e1;
+    --color-slate-400: #94a3b8;
+    --color-slate-500: #64748b;
+    --color-slate-600: #475569;
+    --color-slate-700: #334155;
+    --color-slate-800: #1e293b;
+    --color-slate-900: #0f172a;
+
+    --color-sky-50: #f0f9ff;
+    --color-sky-100: #e0f2fe;
+    --color-sky-600: #0284c7;
+    --color-sky-700: #0369a1;
+
+    --color-violet-50: #f5f3ff;
+    --color-violet-100: #ede9fe;
+    --color-violet-600: #7c3aed;
+    --color-violet-700: #6d28d9;
+
+    --color-rose-50: #fff1f2;
+    --color-rose-100: #ffe4e6;
+    --color-rose-400: #fb7185;
+    --color-rose-500: #f43f5e;
+    --color-rose-600: #e11d48;
+
+    --color-amber-50: #fffbeb;
+    --color-amber-100: #fef3c7;
+    --color-amber-500: #f59e0b;
+    --color-amber-600: #d97706;
+    --color-amber-700: #b45309;
+
+    --color-teal-50: #f0fdfa;
+    --color-teal-100: #ccfbf1;
+    --color-teal-600: #0d9488;
+
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: 1.25rem;
+    --space-6: 1.5rem;
+    --space-8: 2rem;
+    --space-10: 2.5rem;
+    --space-12: 3rem;
+    --space-14: 3.5rem;
+    --space-16: 4rem;
+    --space-20: 5rem;
+    --space-24: 6rem;
+
+    --text-xs: 0.75rem;
+    --text-sm: 0.875rem;
+    --text-base: 1rem;
+    --text-lg: 1.125rem;
+    --text-xl: 1.25rem;
+    --text-2xl: 1.5rem;
+    --text-3xl: 1.875rem;
+    --text-4xl: 2.25rem;
+    --text-5xl: 3rem;
+    --text-6xl: 3.75rem;
+
+    --radius-lg: 0.5rem;
+    --radius-xl: 0.75rem;
+    --radius-2xl: 1rem;
+    --radius-3xl: 1.5rem;
+    --radius-full: 9999px;
+
+    --max-w-7xl: 80rem;
+    --max-w-5xl: 64rem;
+    --max-w-2xl: 42rem;
+    --max-w-xl: 36rem;
+    --max-w-md: 28rem;
+    --max-w-xs: 20rem;
+  }
+
+  /* ============================= */
+  /* RESET / BASE                  */
+  /* ============================= */
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: var(--font-sans);
+    background: var(--color-slate-50);
+    color: var(--color-slate-900);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  img, svg { display: block; max-width: 100%; }
+  a { text-decoration: none; color: inherit; }
+  button { font-family: inherit; cursor: pointer; background: none; border: none; }
+  ul { list-style: none; margin: 0; padding: 0; }
+  h1, h2, h3, h4, p { margin: 0; }
+
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--color-emerald-100); border-radius: 3px; }
+
+  .icon { flex-shrink: 0; }
+  .container {
+    max-width: var(--max-w-7xl);
+    margin: 0 auto;
+    padding: 0 var(--space-6);
+  }
+
+  /* ============================= */
+  /* NAVBAR (shared)                */
+  /* ============================= */
+  .navbar {
+    position: sticky;
+    top: 0; left: 0; right: 0;
+    z-index: 50;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05);
+    border-bottom: 1px solid var(--color-slate-100);
+  }
+  .navbar__inner {
+    max-width: var(--max-w-7xl);
+    margin: 0 auto;
+    padding: var(--space-4) var(--space-6);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .navbar__logo { display: flex; align-items: center; gap: 0.625rem; }
+  .navbar__logo-badge {
+    width: 2rem; height: 2rem;
+    border-radius: var(--radius-lg);
+    background: var(--color-emerald-600);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05);
+    transition: background-color 0.2s ease;
+  }
+  .navbar__logo:hover .navbar__logo-badge { background: var(--color-emerald-700); }
+  .navbar__logo-text { font-weight: 700; color: var(--color-slate-900); font-size: var(--text-lg); letter-spacing: -0.01em; }
+  .navbar__logo-text span { color: var(--color-emerald-600); }
+  .navbar__links { display: flex; align-items: center; gap: var(--space-8); }
+  .navbar__link { font-size: var(--text-sm); font-weight: 500; color: var(--color-slate-600); transition: color 0.2s ease; }
+  .navbar__link:hover { color: var(--color-slate-900); }
+  .navbar__link.is-active { color: var(--color-emerald-600); }
+  .navbar__cta { display: flex; align-items: center; gap: var(--space-3); }
+  .btn-login {
+    font-size: var(--text-sm); font-weight: 500; color: var(--color-slate-600);
+    padding: var(--space-2) var(--space-4); border-radius: var(--radius-lg); transition: all 0.2s ease;
+  }
+  .btn-login:hover { color: var(--color-slate-900); background: var(--color-slate-50); }
+  .btn-primary {
+    font-size: var(--text-sm); font-weight: 600; background: var(--color-emerald-600); color: #fff;
+    padding: var(--space-2) 1.25rem; border-radius: var(--radius-lg); transition: background-color 0.2s ease;
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05);
+  }
+  .btn-primary:hover { background: var(--color-emerald-700); }
+  .navbar__toggle { display: none; padding: var(--space-2); border-radius: var(--radius-lg); color: var(--color-slate-900); }
+  .navbar__toggle:hover { background: var(--color-slate-100); }
+  .navbar__mobile-menu {
+    display: none; background: #fff; border-top: 1px solid var(--color-slate-100);
+    padding: var(--space-4) var(--space-6); flex-direction: column; gap: var(--space-4);
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); max-height: 0; overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+  }
+  .navbar__mobile-menu.is-open { display: flex; max-height: 30rem; }
+  .navbar__mobile-link { font-size: var(--text-sm); font-weight: 500; color: var(--color-slate-700); padding: var(--space-1) 0; }
+  .navbar__mobile-link:hover { color: var(--color-emerald-600); }
+  .navbar__mobile-actions { display: flex; gap: var(--space-3); padding-top: var(--space-2); border-top: 1px solid var(--color-slate-100); }
+  .navbar__mobile-actions .btn-login { flex: 1; text-align: center; border: 1px solid var(--color-slate-200); }
+  .navbar__mobile-actions .btn-primary { flex: 1; text-align: center; }
+
+  .badge {
+    display: inline-flex; align-items: center; gap: var(--space-2);
+    background: var(--color-emerald-50); border: 1px solid var(--color-emerald-100);
+    border-radius: var(--radius-full); padding: 0.375rem var(--space-4);
+  }
+  .badge__text { font-size: var(--text-xs); font-weight: 600; color: var(--color-emerald-700); text-transform: uppercase; letter-spacing: 0.05em; }
+  .pulse-dot { width: 0.5rem; height: 0.5rem; background: var(--color-emerald-500); border-radius: var(--radius-full); animation: pulse 2s cubic-bezier(0.4,0,0.6,1) infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+  /* ============================= */
+  /* RESULTS PAGE HEADER            */
+  /* ============================= */
+  .results-page { position: relative; padding: var(--space-10) 0 var(--space-24); }
+  .results-page__bg {
+    position: absolute; inset: 0; z-index: -1; opacity: 0.35;
+    background-image: radial-gradient(circle at center, var(--color-emerald-100) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+  .results-header {
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;
+    gap: var(--space-4); margin-bottom: var(--space-8);
+  }
+  .results-header__left { display: flex; flex-direction: column; gap: var(--space-3); }
+  .results-header__title {
+    font-family: var(--font-display); font-size: var(--text-3xl); font-weight: 800;
+    color: var(--color-slate-900); letter-spacing: -0.02em;
+  }
+  .results-header__title .accent { color: var(--color-emerald-600); }
+  .results-header__sub { font-size: var(--text-sm); color: var(--color-slate-500); }
+  .results-header__back {
+    display: inline-flex; align-items: center; gap: var(--space-1);
+    font-size: var(--text-xs); font-weight: 600; color: var(--color-slate-400);
+    transition: color 0.2s ease;
+  }
+  .results-header__back:hover { color: var(--color-emerald-600); }
+
+  /* ============================= */
+  /* LAYOUT: IMAGE + INSIGHTS       */
+  /* ============================= */
+  .results-grid {
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: var(--space-8);
+    align-items: start;
+  }
+
+  /* ---- Left: image panel ---- */
+  .image-panel {
+    position: sticky;
+    top: 5.5rem;
+    background: #fff;
+    border: 1px solid var(--color-slate-100);
+    border-radius: var(--radius-3xl);
+    padding: var(--space-5);
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05);
+  }
+  .image-panel__frame {
+    position: relative;
+    border-radius: var(--radius-2xl);
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+    background: var(--color-slate-100);
+  }
+  .image-panel__frame img { width: 100%; height: 100%; object-fit: cover; }
+  .image-panel__scan {
+    position: absolute; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--color-emerald-400, #34d399), transparent);
+    box-shadow: 0 0 12px 2px rgba(16,185,129,0.6);
+    animation: scan 2.6s ease-in-out infinite;
+  }
+  @keyframes scan { 0% { top: 4%; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { top: 94%; opacity: 0; } }
+  .image-panel__corner {
+    position: absolute; width: 1.5rem; height: 1.5rem;
+    border-color: var(--color-emerald-400, #34d399); opacity: 0.9;
+  }
+  .image-panel__corner--tl { top: 10px; left: 10px; border-top: 3px solid; border-left: 3px solid; border-radius: 6px 0 0 0; }
+  .image-panel__corner--tr { top: 10px; right: 10px; border-top: 3px solid; border-right: 3px solid; border-radius: 0 6px 0 0; }
+  .image-panel__corner--bl { bottom: 10px; left: 10px; border-bottom: 3px solid; border-left: 3px solid; border-radius: 0 0 0 6px; }
+  .image-panel__corner--br { bottom: 10px; right: 10px; border-bottom: 3px solid; border-right: 3px solid; border-radius: 0 0 6px 0; }
+  .image-panel__tag {
+    position: absolute; bottom: var(--space-3); left: var(--space-3);
+    display: inline-flex; align-items: center; gap: 0.375rem;
+    background: rgba(15,23,42,0.75); backdrop-filter: blur(4px);
+    color: #fff; font-size: var(--text-xs); font-weight: 600;
+    padding: 0.3rem 0.75rem; border-radius: var(--radius-full);
+  }
+  .image-panel__meta {
+    display: flex; flex-direction: column; gap: var(--space-3);
+    margin-top: var(--space-5); padding-top: var(--space-5);
+    border-top: 1px solid var(--color-slate-100);
+  }
+  .image-panel__meta-row { display: flex; align-items: center; justify-content: space-between; }
+  .image-panel__meta-label { font-size: var(--text-xs); color: var(--color-slate-400); font-weight: 500; }
+  .image-panel__meta-val { font-size: var(--text-xs); color: var(--color-slate-800); font-weight: 600; }
+  .image-panel__reupload {
+    margin-top: var(--space-5); width: 100%; display: flex; align-items: center; justify-content: center;
+    gap: var(--space-2); font-size: var(--text-xs); font-weight: 600; color: var(--color-slate-600);
+    border: 1px solid var(--color-slate-200); border-radius: var(--radius-xl); padding: var(--space-3) 0;
+    transition: all 0.2s ease;
+  }
+  .image-panel__reupload:hover { background: var(--color-slate-50); border-color: var(--color-slate-300); }
+
+  /* ---- Right: insights grid ---- */
+  .insights-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-5);
+  }
+  .insight-card {
+    position: relative;
+    background: #fff;
+    border-radius: var(--radius-2xl);
+    border: 1px solid var(--color-slate-100);
+    padding: var(--space-5);
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05);
+    transition: all 0.2s ease;
+    overflow: hidden;
+  }
+  .insight-card:hover { transform: translateY(-3px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.08); }
+  .insight-card--span2 { grid-column: span 2; }
+  .insight-card--span3 { grid-column: span 3; }
+
+  .insight-card__top { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-4); }
+  .insight-card__icon {
+    width: 2.5rem; height: 2.5rem; border-radius: var(--radius-xl);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .insight-card__label {
+    font-size: var(--text-xs); font-weight: 600; color: var(--color-slate-400);
+    text-transform: uppercase; letter-spacing: 0.06em;
+  }
+  .insight-card__badge {
+    font-size: 0.625rem; font-weight: 700; padding: 0.2rem 0.55rem; border-radius: var(--radius-full);
+  }
+
+  /* Food recognition card */
+  .food-recog__icon { background: var(--color-emerald-50); }
+  .food-recog__name { font-family: var(--font-display); font-size: var(--text-2xl); font-weight: 800; color: var(--color-slate-900); margin-bottom: var(--space-1); }
+  .food-recog__tags { display: flex; flex-wrap: wrap; gap: 0.375rem; margin-top: var(--space-3); }
+  .food-recog__tag {
+    font-size: var(--text-xs); font-weight: 500; color: var(--color-emerald-700);
+    background: var(--color-emerald-50); border: 1px solid var(--color-emerald-100);
+    padding: 0.2rem 0.625rem; border-radius: var(--radius-full);
+  }
+
+  /* Progress ring (confidence / quality / rescue / pickup) */
+  .ring-card { display: flex; flex-direction: column; align-items: center; text-align: center; }
+  .ring-card__icon { align-self: flex-start; }
+  .ring-wrap { position: relative; width: 6.5rem; height: 6.5rem; margin: var(--space-1) 0 var(--space-3); }
+  .ring-wrap svg { transform: rotate(-90deg); width: 100%; height: 100%; }
+  .ring-wrap circle { fill: none; stroke-width: 8; }
+  .ring-track { stroke: var(--color-slate-100); }
+  .ring-bar { stroke-linecap: round; transition: stroke-dashoffset 1.2s cubic-bezier(0.16,1,0.3,1); }
+  .ring-value {
+    position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }
+  .ring-value__num { font-family: var(--font-display); font-size: var(--text-xl); font-weight: 800; color: var(--color-slate-900); }
+  .ring-value__suffix { font-size: 0.625rem; color: var(--color-slate-400); font-weight: 600; }
+  .ring-card__title { font-size: var(--text-sm); font-weight: 700; color: var(--color-slate-800); margin-bottom: 0.25rem; }
+  .ring-card__desc { font-size: var(--text-xs); color: var(--color-slate-500); line-height: 1.5; }
+
+  /* Servings + time cards (simple stat style) */
+  .stat-mini__icon { }
+  .stat-mini__value { font-family: var(--font-display); font-size: var(--text-3xl); font-weight: 800; color: var(--color-slate-900); line-height: 1; margin-bottom: var(--space-1); }
+  .stat-mini__value small { font-size: var(--text-sm); font-weight: 600; color: var(--color-slate-400); }
+  .stat-mini__desc { font-size: var(--text-xs); color: var(--color-slate-500); }
+
+  /* Safe consumption countdown */
+  .countdown-card__icon { background: var(--color-amber-50); }
+  .countdown-bar-track { height: 0.5rem; background: var(--color-slate-100); border-radius: var(--radius-full); overflow: hidden; margin-top: var(--space-3); }
+  .countdown-bar-fill { height: 100%; border-radius: var(--radius-full); background: linear-gradient(90deg, var(--color-emerald-500), var(--color-amber-500)); }
+  .countdown-card__labels { display: flex; justify-content: space-between; font-size: var(--text-xs); color: var(--color-slate-400); margin-top: 0.375rem; }
+
+  /* NGO recommendation card */
+  .ngo-rec__icon { background: var(--color-sky-50); }
+  .ngo-rec__list { display: flex; flex-direction: column; gap: var(--space-3); margin-top: var(--space-2); }
+  .ngo-rec__item {
+    display: flex; align-items: center; gap: var(--space-3);
+    padding: var(--space-3); border-radius: var(--radius-xl);
+    border: 1px solid var(--color-slate-100); transition: all 0.2s ease;
+  }
+  .ngo-rec__item:hover { border-color: var(--color-sky-100); background: var(--color-sky-50); }
+  .ngo-rec__item--best { border-color: var(--color-emerald-200); background: var(--color-emerald-50); }
+  .ngo-rec__avatar {
+    width: 2.5rem; height: 2.5rem; border-radius: var(--radius-lg); flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display); font-weight: 800; font-size: var(--text-sm); color: #fff;
+  }
+  .ngo-rec__info { flex: 1; min-width: 0; }
+  .ngo-rec__name { font-size: var(--text-sm); font-weight: 700; color: var(--color-slate-900); }
+  .ngo-rec__meta { font-size: var(--text-xs); color: var(--color-slate-500); margin-top: 0.125rem; }
+  .ngo-rec__match { font-size: var(--text-xs); font-weight: 700; color: var(--color-emerald-700); white-space: nowrap; }
+
+  /* AI Explanation card */
+  .ai-explain__icon { background: var(--color-violet-50); }
+  .ai-explain__text { font-size: var(--text-sm); color: var(--color-slate-600); line-height: 1.75; }
+  .ai-explain__chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: var(--space-4); }
+  .ai-explain__chip {
+    display: inline-flex; align-items: center; gap: 0.375rem;
+    font-size: var(--text-xs); font-weight: 600; color: var(--color-violet-700);
+    background: var(--color-violet-50); border: 1px solid var(--color-violet-100);
+    padding: 0.3rem 0.75rem; border-radius: var(--radius-full);
+  }
+
+  /* Environmental impact card */
+  .env-impact__icon { background: var(--color-teal-50); }
+  .env-impact__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-4); margin-top: var(--space-2); }
+  .env-impact__stat { text-align: center; padding: var(--space-4) var(--space-2); border-radius: var(--radius-xl); background: var(--color-slate-50); }
+  .env-impact__stat-val { font-family: var(--font-display); font-size: var(--text-xl); font-weight: 800; color: var(--color-teal-600); }
+  .env-impact__stat-lbl { font-size: var(--text-xs); color: var(--color-slate-500); margin-top: 0.25rem; }
+
+  /* Confirm donation CTA */
+  .confirm-card {
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--space-5);
+    background: linear-gradient(120deg, var(--color-emerald-600), var(--color-emerald-700));
+    border-radius: var(--radius-3xl); padding: var(--space-8);
+    box-shadow: 0 20px 25px -5px rgba(5,150,105,0.35);
+  }
+  .confirm-card__left { color: #fff; max-width: 26rem; }
+  .confirm-card__title { font-family: var(--font-display); font-size: var(--text-2xl); font-weight: 800; margin-bottom: var(--space-2); }
+  .confirm-card__desc { font-size: var(--text-sm); color: var(--color-emerald-50); line-height: 1.6; }
+  .confirm-card__btn {
+    display: flex; align-items: center; gap: var(--space-3);
+    background: #fff; color: var(--color-emerald-700); font-weight: 700; font-size: var(--text-base);
+    padding: var(--space-4) var(--space-8); border-radius: var(--radius-xl);
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.15); transition: all 0.2s ease; flex-shrink: 0;
+  }
+  .confirm-card__btn:hover { transform: translateY(-2px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2); }
+  .confirm-card__btn:active { transform: translateY(0); }
+  .confirm-card__btn.is-confirmed { background: var(--color-emerald-800); color: #fff; cursor: default; }
+  .confirm-card__btn.is-confirmed:hover { transform: none; }
+
+  /* ============================= */
+  /* FOOTER (shared)                */
+  /* ============================= */
+  .footer { background: var(--color-slate-900); color: #fff; padding-top: var(--space-16); padding-bottom: var(--space-8); margin-top: var(--space-16); }
+  .footer__top { display: grid; grid-template-columns: repeat(6, 1fr); gap: var(--space-8); padding-bottom: var(--space-12); border-bottom: 1px solid #1e293b; }
+  .footer__brand { grid-column: span 2 / span 2; }
+  .footer__brand-logo { display: flex; align-items: center; gap: 0.625rem; margin-bottom: var(--space-4); }
+  .footer__brand-badge { width: 2rem; height: 2rem; border-radius: var(--radius-lg); background: var(--color-emerald-600); display: flex; align-items: center; justify-content: center; }
+  .footer__brand-text { font-weight: 700; font-size: var(--text-lg); letter-spacing: -0.01em; }
+  .footer__brand-text span { color: #34d399; }
+  .footer__brand-desc { font-size: var(--text-sm); color: var(--color-slate-400); line-height: 1.6; margin-bottom: var(--space-6); max-width: var(--max-w-xs); }
+  .footer__social { display: flex; gap: var(--space-3); }
+  .footer__social-btn { width: 2.25rem; height: 2.25rem; border-radius: var(--radius-lg); background: #1e293b; display: flex; align-items: center; justify-content: center; color: var(--color-slate-400); transition: background-color 0.2s ease; }
+  .footer__social-btn:hover { background: #334155; }
+  .footer__col-title { font-size: var(--text-xs); font-weight: 600; color: var(--color-slate-500); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: var(--space-4); }
+  .footer__col-list { display: flex; flex-direction: column; gap: 0.625rem; }
+  .footer__col-link { font-size: var(--text-sm); color: var(--color-slate-400); transition: color 0.2s ease; }
+  .footer__col-link:hover { color: #fff; }
+  .footer__bottom { padding-top: var(--space-8); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--space-4); }
+  .footer__copyright { font-size: var(--text-xs); color: var(--color-slate-500); margin: 0; }
+  .footer__credit { font-size: var(--text-xs); color: var(--color-slate-500); display: flex; align-items: center; gap: 0.25rem; margin: 0; }
+  .footer__credit .accent { color: var(--color-emerald-500); }
+
+  /* ============================= */
+  /* RESPONSIVE                     */
+  /* ============================= */
+  @media (max-width: 1180px) {
+    .insights-grid { grid-template-columns: repeat(2, 1fr); }
+    .insight-card--span3 { grid-column: span 2; }
+  }
+  @media (max-width: 1024px) {
+    .navbar__links, .navbar__cta { display: none; }
+    .navbar__toggle { display: block; }
+    .results-grid { grid-template-columns: 1fr; }
+    .image-panel { position: static; max-width: 22rem; margin: 0 auto; }
+    .footer__top { grid-template-columns: repeat(2, 1fr); }
+    .footer__brand { grid-column: span 2 / span 2; }
+  }
+  @media (max-width: 640px) {
+    .insights-grid { grid-template-columns: 1fr; }
+    .insight-card--span2, .insight-card--span3 { grid-column: span 1; }
+    .results-header { flex-direction: column; align-items: flex-start; }
+    .confirm-card { flex-direction: column; align-items: stretch; text-align: center; }
+    .confirm-card__left { max-width: none; }
+    .confirm-card__btn { justify-content: center; }
+    .env-impact__grid { grid-template-columns: 1fr; }
+    .footer__top { grid-template-columns: 1fr 1fr; gap: var(--space-6); }
+    .footer__bottom { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================= -->
+<!-- NAVBAR                        -->
+<!-- ============================= -->
+<header class="navbar" id="navbar">
+  <div class="navbar__inner">
+    <a href="rescuebite-ai-landing.html" class="navbar__logo">
+      <div class="navbar__logo-badge">
+        <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+      </div>
+      <span class="navbar__logo-text">RescueBite<span> AI</span></span>
+    </a>
+    <nav class="navbar__links">
+      <a href="restaurant-dashboard.html" class="navbar__link">Dashboard</a>
+      <a href="#" class="navbar__link is-active">AI Analysis</a>
+      <a href="#" class="navbar__link">Donations</a>
+      <a href="rescuebite-ai-landing.html#contact" class="navbar__link">Contact</a>
+    </nav>
+    <div class="navbar__cta">
+      <button class="btn-login">Help</button>
+      <button class="btn-primary">Account</button>
+    </div>
+    <button class="navbar__toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mobileMenu">
+      <svg id="menuIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+      <svg id="closeIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="navbar__mobile-menu" id="mobileMenu">
+    <a href="restaurant-dashboard.html" class="navbar__mobile-link">Dashboard</a>
+    <a href="#" class="navbar__mobile-link">AI Analysis</a>
+    <a href="#" class="navbar__mobile-link">Donations</a>
+    <a href="rescuebite-ai-landing.html#contact" class="navbar__mobile-link">Contact</a>
+    <div class="navbar__mobile-actions">
+      <button class="btn-login">Help</button>
+      <button class="btn-primary">Account</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="results-page">
+    <div class="results-page__bg" aria-hidden="true"></div>
+    <div class="container">
+
+      <div class="results-header">
+        <div class="results-header__left">
+          <a href="restaurant-dashboard.html" class="results-header__back">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            Back to Dashboard
+          </a>
+          <h1 class="results-header__title">AI Analysis <span class="accent">Results</span></h1>
+          <p class="results-header__sub">Here's what our AI found in your uploaded photo — review and confirm to send it to a matched NGO.</p>
+        </div>
+        <div class="badge">
+          <span class="pulse-dot" aria-hidden="true"></span>
+          <span class="badge__text">Analysis Complete · 1.8s</span>
+        </div>
+      </div>
+
+      <div class="results-grid">
+
+        <!-- ============================= -->
+        <!-- LEFT: UPLOADED IMAGE          -->
+        <!-- ============================= -->
+        <div class="image-panel">
+          <div class="image-panel__frame">
+            <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=800&auto=format&fit=crop" alt="Uploaded photo of surplus food ready for donation">
+            <div class="image-panel__scan" aria-hidden="true"></div>
+            <span class="image-panel__corner image-panel__corner--tl" aria-hidden="true"></span>
+            <span class="image-panel__corner image-panel__corner--tr" aria-hidden="true"></span>
+            <span class="image-panel__corner image-panel__corner--bl" aria-hidden="true"></span>
+            <span class="image-panel__corner image-panel__corner--br" aria-hidden="true"></span>
+            <span class="image-panel__tag">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+              AI Scanned
+            </span>
+          </div>
+
+          <div class="image-panel__meta">
+            <div class="image-panel__meta-row">
+              <span class="image-panel__meta-label">Uploaded by</span>
+              <span class="image-panel__meta-val">Green Fork Bistro</span>
+            </div>
+            <div class="image-panel__meta-row">
+              <span class="image-panel__meta-label">Upload time</span>
+              <span class="image-panel__meta-val">Today, 4:12 PM</span>
+            </div>
+            <div class="image-panel__meta-row">
+              <span class="image-panel__meta-label">File size</span>
+              <span class="image-panel__meta-val">2.4 MB</span>
+            </div>
+          </div>
+
+          <button class="image-panel__reupload" type="button">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
+            Re-upload Photo
+          </button>
+        </div>
+
+        <!-- ============================= -->
+        <!-- RIGHT: AI INSIGHTS GRID       -->
+        <!-- ============================= -->
+        <div class="insights-grid">
+
+          <!-- Food Recognition -->
+          <div class="insight-card insight-card--span2">
+            <div class="insight-card__top">
+              <div class="insight-card__icon food-recog__icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-emerald-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 11h.01M11 15h.01M16 16h.01M12.5 3a8.5 8.5 0 1 0 8.5 8.5c0-1-.8-1.5-1.5-1.5h-1a2 2 0 0 1-2-2v-1c0-.7-.5-1.5-1.5-1.5h-1A2 2 0 0 1 12.5 3Z"/></svg>
+              </div>
+              <span class="insight-card__label">Food Recognition</span>
+            </div>
+            <div class="food-recog__name">Vegetable Biryani &amp; Curry Trays</div>
+            <p class="stat-mini__desc">Detected mixed-grain rice dish with mixed vegetable curry, packaged in 3 aluminum trays.</p>
+            <div class="food-recog__tags">
+              <span class="food-recog__tag">Vegetarian</span>
+              <span class="food-recog__tag">Cooked Meal</span>
+              <span class="food-recog__tag">Nut-Free</span>
+              <span class="food-recog__tag">3 Trays Detected</span>
+            </div>
+          </div>
+
+          <!-- Confidence Score -->
+          <div class="insight-card ring-card">
+            <div class="insight-card__top" style="width:100%;">
+              <div class="insight-card__icon" style="background:var(--color-emerald-50);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-emerald-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              </div>
+              <span class="insight-card__badge" style="background:var(--color-emerald-50); color:var(--color-emerald-700);">High</span>
+            </div>
+            <div class="ring-wrap">
+              <svg viewBox="0 0 100 100">
+                <circle class="ring-track" cx="50" cy="50" r="42"></circle>
+                <circle class="ring-bar" cx="50" cy="50" r="42" stroke="var(--color-emerald-500)"
+                  stroke-dasharray="263.9" stroke-dashoffset="263.9" data-target="0.96"></circle>
+              </svg>
+              <div class="ring-value">
+                <span class="ring-value__num" data-count="96">0</span>
+                <span class="ring-value__suffix">%</span>
+              </div>
+            </div>
+            <div class="ring-card__title">Confidence Score</div>
+            <div class="ring-card__desc">Model certainty in food identification</div>
+          </div>
+
+          <!-- Estimated Servings -->
+          <div class="insight-card">
+            <div class="insight-card__top">
+              <div class="insight-card__icon" style="background:var(--color-orange-50);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-orange-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>
+              </div>
+              <span class="insight-card__label">Servings</span>
+            </div>
+            <div class="stat-mini__value">42 <small>meals</small></div>
+            <p class="stat-mini__desc">Estimated from tray volume &amp; density scan</p>
+          </div>
+
+          <!-- Remaining Safe Consumption Time -->
+          <div class="insight-card insight-card--span2">
+            <div class="insight-card__top">
+              <div class="insight-card__icon countdown-card__icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-amber-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+              </div>
+              <span class="insight-card__label">Remaining Safe Consumption Time</span>
+            </div>
+            <div class="stat-mini__value">4 <small>hrs 20 min left</small></div>
+            <div class="countdown-bar-track">
+              <div class="countdown-bar-fill" style="width: 62%;"></div>
+            </div>
+            <div class="countdown-card__labels">
+              <span>Prepared 3:40 PM</span>
+              <span>Est. spoilage 8:00 PM</span>
+            </div>
+          </div>
+
+          <!-- Donation Quality Score -->
+          <div class="insight-card ring-card">
+            <div class="insight-card__top" style="width:100%;">
+              <div class="insight-card__icon" style="background:var(--color-sky-50);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-sky-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1 3-6Z"/></svg>
+              </div>
+              <span class="insight-card__badge" style="background:var(--color-sky-50); color:var(--color-sky-700);">A+</span>
+            </div>
+            <div class="ring-wrap">
+              <svg viewBox="0 0 100 100">
+                <circle class="ring-track" cx="50" cy="50" r="42"></circle>
+                <circle class="ring-bar" cx="50" cy="50" r="42" stroke="var(--color-sky-600)"
+                  stroke-dasharray="263.9" stroke-dashoffset="263.9" data-target="0.91"></circle>
+              </svg>
+              <div class="ring-value">
+                <span class="ring-value__num" data-count="91">0</span>
+                <span class="ring-value__suffix">/100</span>
+              </div>
+            </div>
+            <div class="ring-card__title">Donation Quality Score</div>
+            <div class="ring-card__desc">Freshness, packaging &amp; portioning</div>
+          </div>
+
+          <!-- Rescue Priority Score -->
+          <div class="insight-card ring-card">
+            <div class="insight-card__top" style="width:100%;">
+              <div class="insight-card__icon" style="background:var(--color-rose-50);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-rose-500)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+              </div>
+              <span class="insight-card__badge" style="background:var(--color-rose-50); color:var(--color-rose-600);">Urgent</span>
+            </div>
+            <div class="ring-wrap">
+              <svg viewBox="0 0 100 100">
+                <circle class="ring-track" cx="50" cy="50" r="42"></circle>
+                <circle class="ring-bar" cx="50" cy="50" r="42" stroke="var(--color-rose-500)"
+                  stroke-dasharray="263.9" stroke-dashoffset="263.9" data-target="0.88"></circle>
+              </svg>
+              <div class="ring-value">
+                <span class="ring-value__num" data-count="88">0</span>
+                <span class="ring-value__suffix">/100</span>
+              </div>
+            </div>
+            <div class="ring-card__title">Rescue Priority Score</div>
+            <div class="ring-card__desc">Weighted by time window &amp; quantity</div>
+          </div>
+
+          <!-- Pickup Success Probability -->
+          <div class="insight-card ring-card">
+            <div class="insight-card__top" style="width:100%;">
+              <div class="insight-card__icon" style="background:var(--color-violet-50);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-violet-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11h18M3 15h18"/><rect x="3" y="5" width="18" height="14" rx="2"/></svg>
+              </div>
+              <span class="insight-card__badge" style="background:var(--color-violet-50); color:var(--color-violet-700);">Likely</span>
+            </div>
+            <div class="ring-wrap">
+              <svg viewBox="0 0 100 100">
+                <circle class="ring-track" cx="50" cy="50" r="42"></circle>
+                <circle class="ring-bar" cx="50" cy="50" r="42" stroke="var(--color-violet-600)"
+                  stroke-dasharray="263.9" stroke-dashoffset="263.9" data-target="0.83"></circle>
+              </svg>
+              <div class="ring-value">
+                <span class="ring-value__num" data-count="83">0</span>
+                <span class="ring-value__suffix">%</span>
+              </div>
+            </div>
+            <div class="ring-card__title">Pickup Success Probability</div>
+            <div class="ring-card__desc">Based on nearby NGO capacity &amp; history</div>
+          </div>
+
+          <!-- Smart NGO Recommendation -->
+          <div class="insight-card insight-card--span3">
+            <div class="insight-card__top">
+              <div class="insight-card__icon ngo-rec__icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-sky-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              </div>
+              <span class="insight-card__label">Smart NGO Recommendation</span>
+            </div>
+            <div class="ngo-rec__list">
+              <div class="ngo-rec__item ngo-rec__item--best">
+                <div class="ngo-rec__avatar" style="background:var(--color-emerald-600);">HF</div>
+                <div class="ngo-rec__info">
+                  <div class="ngo-rec__name">Hope Foundation Kitchen</div>
+                  <div class="ngo-rec__meta">1.8 km away · Capacity for 60 meals · Avg. pickup 22 min</div>
+                </div>
+                <span class="ngo-rec__match">98% match</span>
+              </div>
+              <div class="ngo-rec__item">
+                <div class="ngo-rec__avatar" style="background:var(--color-sky-600);">FS</div>
+                <div class="ngo-rec__info">
+                  <div class="ngo-rec__name">Feed the Streets NGO</div>
+                  <div class="ngo-rec__meta">3.2 km away · Capacity for 50 meals · Avg. pickup 35 min</div>
+                </div>
+                <span class="ngo-rec__match" style="color:var(--color-slate-500);">87% match</span>
+              </div>
+              <div class="ngo-rec__item">
+                <div class="ngo-rec__avatar" style="background:var(--color-violet-600);">CC</div>
+                <div class="ngo-rec__info">
+                  <div class="ngo-rec__name">Community Care Trust</div>
+                  <div class="ngo-rec__meta">4.6 km away · Capacity for 45 meals · Avg. pickup 41 min</div>
+                </div>
+                <span class="ngo-rec__match" style="color:var(--color-slate-500);">79% match</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- AI Explanation -->
+          <div class="insight-card insight-card--span2">
+            <div class="insight-card__top">
+              <div class="insight-card__icon ai-explain__icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-violet-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 0 0-4 4v1a4 4 0 0 0-2 7.5V17a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3v-2.5A4 4 0 0 0 16 7V6a4 4 0 0 0-4-4Z"/><path d="M9 21h6"/></svg>
+              </div>
+              <span class="insight-card__label">AI Explanation</span>
+            </div>
+            <p class="ai-explain__text">This donation was flagged <strong>high priority</strong> because it combines a large serving count with a narrow safe-consumption window. Image clarity and consistent tray packaging pushed confidence above 95%, and Hope Foundation Kitchen was ranked first for its proximity, current capacity, and strong pickup reliability for vegetarian meals.</p>
+            <div class="ai-explain__chips">
+              <span class="ai-explain__chip">Large quantity</span>
+              <span class="ai-explain__chip">Short shelf life</span>
+              <span class="ai-explain__chip">High image clarity</span>
+              <span class="ai-explain__chip">Strong NGO match</span>
+            </div>
+          </div>
+
+          <!-- Environmental Impact -->
+          <div class="insight-card insight-card--span3">
+            <div class="insight-card__top">
+              <div class="insight-card__icon env-impact__icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-teal-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+              </div>
+              <span class="insight-card__label">Environmental Impact</span>
+            </div>
+            <div class="env-impact__grid">
+              <div class="env-impact__stat">
+                <div class="env-impact__stat-val">18.4 kg</div>
+                <div class="env-impact__stat-lbl">Food Waste Prevented</div>
+              </div>
+              <div class="env-impact__stat">
+                <div class="env-impact__stat-val">46 kg</div>
+                <div class="env-impact__stat-lbl">CO₂e Emissions Saved</div>
+              </div>
+              <div class="env-impact__stat">
+                <div class="env-impact__stat-val">6,100 L</div>
+                <div class="env-impact__stat-lbl">Water Footprint Saved</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ============================= -->
+      <!-- CONFIRM DONATION               -->
+      <!-- ============================= -->
+      <div class="confirm-card" style="margin-top: var(--space-8);">
+        <div class="confirm-card__left">
+          <div class="confirm-card__title">Ready to send this donation?</div>
+          <p class="confirm-card__desc">Confirming will notify Hope Foundation Kitchen instantly and lock in a pickup window before your safe-consumption deadline.</p>
+        </div>
+        <button class="confirm-card__btn" id="confirmBtn" type="button">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+          <span id="confirmLabel">Confirm Donation</span>
+        </button>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<!-- ============================= -->
+<!-- FOOTER                        -->
+<!-- ============================= -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <div class="footer__brand-logo">
+          <div class="footer__brand-badge">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+          </div>
+          <span class="footer__brand-text">RescueBite<span> AI</span></span>
+        </div>
+        <p class="footer__brand-desc">Using artificial intelligence to eliminate food waste and feed communities — one rescued meal at a time.</p>
+        <div class="footer__social">
+          <button class="footer__social-btn" aria-label="Twitter">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </button>
+          <button class="footer__social-btn" aria-label="GitHub">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/></svg>
+          </button>
+          <button class="footer__social-btn" aria-label="LinkedIn">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="footer__col">
+        <h4 class="footer__col-title">Platform</h4>
+        <ul class="footer__col-list">
+          <li><a href="rescuebite-ai-landing.html#features" class="footer__col-link">Features</a></li>
+          <li><a href="rescuebite-ai-landing.html#how" class="footer__col-link">How It Works</a></li>
+          <li><a href="rescuebite-ai-landing.html#demo" class="footer__col-link">AI Demo</a></li>
+          <li><a href="rescuebite-ai-landing.html#sdg" class="footer__col-link">SDG Impact</a></li>
+        </ul>
+      </div>
+
+      <div class="footer__col">
+        <h4 class="footer__col-title">Organization</h4>
+        <ul class="footer__col-list">
+          <li><a href="#" class="footer__col-link">About</a></li>
+          <li><a href="#" class="footer__col-link">Blog</a></li>
+          <li><a href="#" class="footer__col-link">Careers</a></li>
+          <li><a href="#" class="footer__col-link">Press</a></li>
+        </ul>
+      </div>
+
+      <div class="footer__col">
+        <h4 class="footer__col-title">Partners</h4>
+        <ul class="footer__col-list">
+          <li><a href="restaurant-login.html" class="footer__col-link">For Restaurants</a></li>
+          <li><a href="role-selection.html" class="footer__col-link">For NGOs</a></li>
+          <li><a href="#" class="footer__col-link">API Access</a></li>
+          <li><a href="#" class="footer__col-link">Municipalities</a></li>
+        </ul>
+      </div>
+
+      <div class="footer__col">
+        <h4 class="footer__col-title">Legal</h4>
+        <ul class="footer__col-list">
+          <li><a href="#" class="footer__col-link">Privacy Policy</a></li>
+          <li><a href="#" class="footer__col-link">Terms of Service</a></li>
+          <li><a href="#" class="footer__col-link">Cookie Policy</a></li>
+          <li><a href="#" class="footer__col-link">Accessibility</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <p class="footer__copyright">© 2025 RescueBite AI. All rights reserved.</p>
+      <p class="footer__credit">
+        Built with
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="#f43f5e" stroke="#f43f5e"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+        for a sustainable future ·
+        <span class="accent">Final Year AI Engineering Project</span>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    'use strict';
+
+    /* Mobile menu toggle */
+    var navToggle = document.getElementById('navToggle');
+    var mobileMenu = document.getElementById('mobileMenu');
+    var menuIcon = document.getElementById('menuIcon');
+    var closeIcon = document.getElementById('closeIcon');
+    var isOpen = false;
+
+    function setMenu(open) {
+      isOpen = open;
+      navToggle.setAttribute('aria-expanded', String(open));
+      if (open) {
+        mobileMenu.classList.add('is-open');
+        menuIcon.style.display = 'none';
+        closeIcon.style.display = 'block';
+      } else {
+        mobileMenu.classList.remove('is-open');
+        menuIcon.style.display = 'block';
+        closeIcon.style.display = 'none';
+      }
+    }
+    navToggle.addEventListener('click', function () { setMenu(!isOpen); });
+    Array.prototype.forEach.call(mobileMenu.querySelectorAll('.navbar__mobile-link'), function (link) {
+      link.addEventListener('click', function () { setMenu(false); });
+    });
+
+    /* Animate progress rings + count-up numbers when they enter the viewport */
+    var CIRCUMFERENCE = 263.9; // 2 * PI * r(42)
+
+    function animateRing(ring) {
+      var target = parseFloat(ring.getAttribute('data-target')) || 0;
+      var offset = CIRCUMFERENCE * (1 - target);
+      requestAnimationFrame(function () {
+        ring.style.strokeDashoffset = offset;
+      });
+    }
+
+    function animateCount(el) {
+      var target = parseInt(el.getAttribute('data-count'), 10) || 0;
+      var duration = 1200;
+      var start = null;
+
+      function step(ts) {
+        if (!start) start = ts;
+        var progress = Math.min((ts - start) / duration, 1);
+        var eased = 1 - Math.pow(1 - progress, 3);
+        el.textContent = Math.round(eased * target);
+        if (progress < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+
+    var ringCards = document.querySelectorAll('.ring-card');
+    if ('IntersectionObserver' in window) {
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            var ringBar = entry.target.querySelector('.ring-bar');
+            var countEl = entry.target.querySelector('.ring-value__num');
+            if (ringBar) animateRing(ringBar);
+            if (countEl) animateCount(countEl);
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.4 });
+      ringCards.forEach(function (card) { observer.observe(card); });
+    } else {
+      ringCards.forEach(function (card) {
+        var ringBar = card.querySelector('.ring-bar');
+        var countEl = card.querySelector('.ring-value__num');
+        if (ringBar) animateRing(ringBar);
+        if (countEl) animateCount(countEl);
+      });
+    }
+
+    /* Confirm donation action — swap for a real API call */
+    var confirmBtn = document.getElementById('confirmBtn');
+    var confirmLabel = document.getElementById('confirmLabel');
+
+    confirmBtn.addEventListener('click', function () {
+      if (confirmBtn.classList.contains('is-confirmed')) return;
+      confirmLabel.textContent = 'Sending to Hope Foundation…';
+      setTimeout(function () {
+        confirmBtn.classList.add('is-confirmed');
+        confirmLabel.textContent = 'Donation Confirmed ✓';
+      }, 1000);
+    });
+  })();
+</script>
+
+</body>
+</html>

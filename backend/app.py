@@ -262,6 +262,52 @@ def get_logged_in_restaurant():
         connection.close()
 
 
+@app.get("/api/donations")
+def get_donations():
+    restaurant_id = session.get("restaurant_id")
+
+    if not restaurant_id:
+        return jsonify({"error": "Please log in first."}), 401
+
+    connection = get_db_connection()
+
+    if connection is None:
+        return jsonify({"error": "Database connection failed."}), 500
+
+    cursor = None
+
+    try:
+        cursor = connection.cursor(dictionary=True)
+
+        cursor.execute("""
+            SELECT
+                id,
+                food_name,
+                quantity,
+                storage_method,
+                packaging_type,
+                notes,
+                status,
+                created_at
+            FROM food_donations
+            WHERE restaurant_id = %s
+            ORDER BY created_at DESC
+        """, (restaurant_id,))
+
+        donations = cursor.fetchall()
+
+        return jsonify({"donations": donations}), 200
+
+    except Exception:
+        app.logger.exception("Could not fetch donation history")
+        return jsonify({"error": "Could not fetch donations."}), 500
+
+    finally:
+        if cursor:
+            cursor.close()
+        connection.close()        
+
+
 @app.post("/api/donations")
 def create_donation():
     data = request.get_json(silent=True) or {}

@@ -857,29 +857,45 @@
     return months[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
   }
 
-  var donations = [];
-  (function seed() {
-    var count = 42;
-    for (var i = 0; i < count; i++) {
-      var food = FOODS[i % FOODS.length];
-      var ngo = NGOS[Math.floor(Math.random() * NGOS.length)];
-      var status = STATUSES[Math.floor(Math.random() * STATUSES.length)];
-      var date = randomDateWithin(75);
-      donations.push({
-        id: 'RB-' + (2500 + i),
-        food: food.name,
-        cat: food.cat,
-        emoji: food.emoji,
-        servings: 8 + Math.floor(Math.random() * 60),
-        ngo: ngo.name,
-        dist: ngo.dist,
-        date: date,
-        dateISO: toISO(date),
-        status: status
-      });
+var donations = [];
+
+async function loadDonations() {
+  try {
+    const response = await fetch('/api/donations');
+
+    if (!response.ok) {
+      throw new Error('Could not load donation history. Please log in again.');
     }
-    donations.sort(function (a, b) { return b.date - a.date; });
-  })();
+
+    const result = await response.json();
+
+    donations = result.donations.map(function (d) {
+      var date = new Date(d.created_at);
+
+      return {
+        id: 'RB-' + d.id,
+        food: d.food_name,
+        cat: d.storage_method || 'Food Donation',
+        emoji: '🍱',
+        servings: d.quantity,
+        ngo: 'Not assigned',
+        dist: '—',
+        date: date,
+        dateISO: date.getFullYear() + '-' +
+          String(date.getMonth() + 1).padStart(2, '0') + '-' +
+          String(date.getDate()).padStart(2, '0'),
+        status: d.status === 'available' ? 'pending' : d.status
+      };
+    });
+
+    renderStats();
+    render();
+
+  } catch (error) {
+    console.error(error);
+    alert(error.message);
+  }
+}
 
   /* ---------- State ---------- */
   var state = {
@@ -1146,10 +1162,9 @@
     URL.revokeObjectURL(url);
   });
 
-  /* ---------- Init ---------- */
-  renderStats();
-  syncSortHeaders();
-  render();
+/* ---------- Init ---------- */
+syncSortHeaders();
+loadDonations();
 })();
 </script>
 

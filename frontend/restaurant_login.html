@@ -1098,23 +1098,54 @@
     var loginSubmit = document.getElementById('loginSubmit');
     var submitLabel = document.getElementById('submitLabel');
 
-    loginForm.addEventListener('submit', function (e) {
-      e.preventDefault();
-      if (!loginForm.checkValidity()) {
-        loginForm.reportValidity();
-        return;
-      }
-      loginSubmit.classList.add('is-loading');
-      /* Simulated request — swap for a real fetch() call to your auth endpoint */
-      setTimeout(function () {
-        loginSubmit.classList.remove('is-loading');
-        submitLabel.textContent = 'Log In';
-        window.location.href = 'restaurant-dashboard.html';
-      }, 1200);
+    
+loginForm.addEventListener('submit', async function (e) {
+  e.preventDefault();
+
+  if (!loginForm.checkValidity()) {
+    loginForm.reportValidity();
+    return;
+  }
+
+  loginSubmit.disabled = true;
+  loginSubmit.classList.add('is-loading');
+  submitLabel.textContent = 'Logging in...';
+
+  try {
+    const response = await fetch('/api/restaurants/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: document.getElementById('email').value.trim(),
+        password: passwordInput.value,
+        remember: document.getElementById('remember').checked
+      })
     });
 
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.error || 'Login failed.');
+    }
+
+    alert('Welcome back, ' + result.restaurant_name + '!');
+
+    window.location.href = '/restaurant-management.html';
+
+  } catch (error) {
+    alert(error.message || 'Unable to log in. Please try again.');
+  } finally {
+    loginSubmit.disabled = false;
+    loginSubmit.classList.remove('is-loading');
+    submitLabel.textContent = 'Log In';
+  }
+});
+
+
     /* Signup routing — same template will point to role-specific signup targets */
-    var signupTarget = 'restaurant-signup.html';
+    var signupTarget = 'restaurant_signup.html';
     document.getElementById('createAccountBtn').addEventListener('click', function (e) {
       e.preventDefault();
       window.location.href = signupTarget;

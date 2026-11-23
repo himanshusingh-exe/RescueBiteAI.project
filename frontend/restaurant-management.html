@@ -1065,26 +1065,7 @@
   /* ============================= */
   var AVATAR_COLORS = ['#059669', '#ea580c', '#0284c7', '#7c3aed', '#e11d48', '#d97706', '#0d9488'];
 
-  var restaurants = [
-    { id: 1,  name: 'Spice Route Kitchen',      cuisine: 'Indian Curry House',   city: 'Delhi',      email: 'contact@spiceroute.in',     phone: '+91 98100 22331', donations: 214, meals: 3120, rating: 4.7, status: 'active',    verified: true,  joined: '2024-11-02' },
-    { id: 2,  name: 'Green Leaf Bistro',         cuisine: 'Vegetarian / Vegan',   city: 'Mumbai',     email: 'hello@greenleaf.com',        phone: '+91 90210 44120', donations: 178, meals: 2540, rating: 4.5, status: 'active',    verified: true,  joined: '2024-09-15' },
-    { id: 3,  name: 'Bombay Bread Co.',          cuisine: 'Bakery',               city: 'Mumbai',     email: 'info@bombaybread.com',       phone: '+91 88990 12233', donations: 92,  meals: 1210, rating: 4.2, status: 'pending',   verified: false, joined: '2025-05-21' },
-    { id: 4,  name: 'Urban Wok',                 cuisine: 'Pan-Asian',            city: 'Bengaluru',  email: 'team@urbanwok.co',           phone: '+91 99870 66210', donations: 305, meals: 4890, rating: 4.8, status: 'active',    verified: true,  joined: '2024-06-10' },
-    { id: 5,  name: 'Sunrise Diner',             cuisine: 'American Comfort',     city: 'Delhi',      email: 'support@sunrisediner.in',    phone: '+91 91234 77004', donations: 41,  meals: 630,  rating: 3.9, status: 'suspended', verified: true,  joined: '2024-12-19' },
-    { id: 6,  name: 'Kolkata Fish House',        cuisine: 'Bengali Seafood',      city: 'Kolkata',    email: 'hello@kolkatafish.in',       phone: '+91 98765 11002', donations: 133, meals: 1980, rating: 4.4, status: 'active',    verified: true,  joined: '2025-01-08' },
-    { id: 7,  name: 'The Pasta Table',           cuisine: 'Italian',              city: 'Pune',       email: 'contact@pastatable.com',     phone: '+91 90090 33121', donations: 67,  meals: 940,  rating: 4.1, status: 'pending',   verified: false, joined: '2025-06-02' },
-    { id: 8,  name: 'Punjab Da Dhaba',           cuisine: 'North Indian',         city: 'Chandigarh', email: 'info@punjabdhaba.in',        phone: '+91 98123 55210', donations: 256, meals: 3760, rating: 4.6, status: 'active',    verified: true,  joined: '2024-08-27' },
-    { id: 9,  name: 'Café Aroma',                cuisine: 'Cafe / Continental',   city: 'Hyderabad',  email: 'team@cafearoma.in',          phone: '+91 87654 90011', donations: 18,  meals: 260,  rating: 3.6, status: 'pending',   verified: false, joined: '2025-07-01' },
-    { id: 10, name: 'Coastal Curry House',       cuisine: 'South Indian Seafood', city: 'Chennai',    email: 'hello@coastalcurry.in',      phone: '+91 91555 43210', donations: 189, meals: 2720, rating: 4.5, status: 'active',    verified: true,  joined: '2024-10-14' },
-    { id: 11, name: 'Momo Point',                cuisine: 'Tibetan / Nepali',     city: 'Delhi',      email: 'contact@momopoint.in',       phone: '+91 99887 12034', donations: 74,  meals: 1050, rating: 4.0, status: 'suspended', verified: false, joined: '2025-02-11' },
-    { id: 12, name: 'The Grand Thali',           cuisine: 'North Indian Thali',   city: 'Jaipur',     email: 'info@grandthali.in',         phone: '+91 90011 22887', donations: 341, meals: 5210, rating: 4.9, status: 'active',    verified: true,  joined: '2024-04-05' },
-    { id: 13, name: 'Bakers Basket',             cuisine: 'Bakery & Confectionery', city: 'Pune',     email: 'hello@bakersbasket.in',      phone: '+91 91234 66211', donations: 55,  meals: 780,  rating: 4.3, status: 'active',    verified: false, joined: '2025-03-30' },
-    { id: 14, name: 'Andhra Spice',              cuisine: 'Andhra',               city: 'Hyderabad',  email: 'team@andhraspice.in',        phone: '+91 90876 55321', donations: 121, meals: 1760, rating: 4.4, status: 'pending',   verified: false, joined: '2025-05-09' },
-    { id: 15, name: 'The Vegan Table',           cuisine: 'Vegan',                city: 'Bengaluru',  email: 'contact@vegantable.in',      phone: '+91 99001 11322', donations: 98,  meals: 1420, rating: 4.6, status: 'active',    verified: true,  joined: '2024-12-01' },
-    { id: 16, name: 'Malabar Coast Kitchen',     cuisine: 'Kerala',               city: 'Kochi',      email: 'hello@malabarcoast.in',      phone: '+91 88123 99001', donations: 27,  meals: 390,  rating: 3.8, status: 'suspended', verified: true,  joined: '2025-01-22' },
-    { id: 17, name: 'Old Delhi Chaat',           cuisine: 'Street Food',          city: 'Delhi',      email: 'info@olddelhichaat.in',      phone: '+91 90210 88113', donations: 163, meals: 2380, rating: 4.5, status: 'active',    verified: true,  joined: '2024-07-19' },
-    { id: 18, name: 'The Rice Bowl',             cuisine: 'Chinese / Asian',      city: 'Mumbai',     email: 'team@ricebowl.in',           phone: '+91 91009 32011', donations: 84,  meals: 1190, rating: 4.2, status: 'pending',   verified: false, joined: '2025-06-18' }
-  ];
+  var restaurants = [];
 
   var state = { search: '', status: 'all', verify: 'all', sortKey: 'joined', sortDir: 'desc', page: 1, perPage: 8 };
   var pendingAction = null; /* { type: 'suspend'|'activate'|'delete', id } */
@@ -1470,8 +1451,36 @@
   /* ============================= */
   /* INIT                           */
   /* ============================= */
-  renderStats();
-  renderTable();
+  /* ============================= */
+/* LOAD RESTAURANTS FROM DATABASE */
+/* ============================= */
+
+async function loadRestaurants() {
+    try {
+        const response = await fetch('/api/admin/restaurants');
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.error || 'Unable to load restaurants.');
+        }
+
+        restaurants = result.restaurants;
+
+        renderStats();
+        renderTable();
+
+    } catch (error) {
+        console.error('Restaurant loading error:', error);
+        showToast(error.message || 'Could not load restaurants.', 'danger');
+    }
+}
+
+/* ============================= */
+/* INIT                           */
+/* ============================= */
+
+loadRestaurants();
 })();
 </script>
 

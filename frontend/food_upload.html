@@ -1021,12 +1021,12 @@
             <div class="upload-form">
               <div class="upload-form__row">
                 <div class="form-field">
-                  <label for="foodName">Food Name <span class="optional-tag">(optional)</span></label>
-                  <input type="text" id="foodName" name="foodName" placeholder="e.g. Vegetable Biryani">
+                  <label for="foodName">Food Name <span class="required-tag">(required)</span></label>
+                  <input type="text" id="foodName" name="foodName" placeholder="e.g. Vegetable Biryani" required>
                 </div>
                 <div class="form-field">
-                  <label for="quantity">Quantity <span class="optional-tag">(optional)</span></label>
-                  <input type="text" id="quantity" name="quantity" placeholder="e.g. 25 servings / 5 kg">
+                  <label for="quantity">Quantity <span class="required-tag">(required)</span></label>
+                  <input type="text" id="quantity" name="quantity" placeholder="e.g. 25 servings / 5 kg" required>
                 </div>
               </div>
 
@@ -1465,9 +1465,40 @@
     });
 
     var confirmDonationBtn = document.getElementById('confirmDonationBtn');
-    confirmDonationBtn.addEventListener('click', function () {
-      confirmDonationBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Pickup Scheduled!';
+
+confirmDonationBtn.addEventListener('click', async function () {
+  confirmDonationBtn.disabled = true;
+  confirmDonationBtn.textContent = 'Saving Donation...';
+
+  try {
+    const response = await fetch('/api/donations', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        food_name: document.getElementById('foodName').value.trim(),
+        quantity: document.getElementById('quantity').value.trim(),
+        storage_method: document.getElementById('storageMethod').value,
+        packaging_type: document.getElementById('packagingType').value,
+        notes: document.getElementById('notes').value.trim()
+      })
     });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.error || 'Could not save donation.');
+    }
+
+    confirmDonationBtn.innerHTML = '✓ Donation Saved Successfully!';
+
+  } catch (error) {
+    alert(error.message);
+    confirmDonationBtn.textContent = 'Confirm & Schedule Pickup';
+    confirmDonationBtn.disabled = false;
+  }
+});
   })();
 </script>
 

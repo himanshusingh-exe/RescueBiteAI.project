@@ -1514,38 +1514,77 @@
     var submitIcon = document.getElementById('submitIcon');
     var successMessage = document.getElementById('successMessage');
 
-    signupForm.addEventListener('submit', function (e) {
-      e.preventDefault();
+    
+signupForm.addEventListener('submit', async function (e) {
+  e.preventDefault();
 
-      if (password.value.length < 8) {
-        passwordHint.className = 'form-hint form-hint--error';
-        passwordHint.innerHTML = '<span>Password must be at least 8 characters</span>';
-        password.focus();
-        return;
-      }
-      if (password.value !== confirmPassword.value) {
-        passwordHint.className = 'form-hint form-hint--error';
-        passwordHint.innerHTML = '<span>Passwords do not match</span>';
-        confirmPassword.focus();
-        return;
-      }
-      if (!signupForm.terms.checked) {
-        signupForm.terms.focus();
-        return;
-      }
+  if (!signupForm.reportValidity()) return;
 
-      submitBtn.disabled = true;
-      submitBtn.classList.add('is-loading');
-      submitLabel.textContent = 'Creating account…';
-      submitIcon.style.display = 'none';
+  if (password.value.length < 8) {
+    passwordHint.className = 'form-hint form-hint--error';
+    passwordHint.textContent = 'Password must be at least 8 characters';
+    password.focus();
+    return;
+  }
 
-      setTimeout(function () {
-        var restaurantName = document.getElementById('restaurantName').value.trim() || 'your restaurant';
-        successMessage.textContent = 'Welcome, ' + restaurantName + '! We\'ve sent a verification link to your email — confirm it to move on to Step 2.';
-        signupForm.classList.add('is-hidden');
-        signupSuccess.classList.add('is-visible');
-      }, 900);
+  if (password.value !== confirmPassword.value) {
+    passwordHint.className = 'form-hint form-hint--error';
+    passwordHint.textContent = 'Passwords do not match';
+    confirmPassword.focus();
+    return;
+  }
+
+  if (!signupForm.terms.checked) {
+    signupForm.terms.focus();
+    return;
+  }
+
+  submitBtn.disabled = true;
+  submitBtn.classList.add('is-loading');
+  submitLabel.textContent = 'Creating account…';
+  submitIcon.style.display = 'none';
+
+  try {
+    const response = await fetch('/api/restaurants/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        restaurantName: document.getElementById('restaurantName').value.trim(),
+        ownerName: document.getElementById('ownerName').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        phone: document.getElementById('phone').value.trim(),
+        address: document.getElementById('address').value.trim(),
+        city: document.getElementById('city').value.trim(),
+        cuisine: document.getElementById('cuisine').value.trim(),
+        password: password.value,
+        confirmPassword: confirmPassword.value,
+        terms: signupForm.terms.checked
+      })
     });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.error || 'Registration failed.');
+    }
+
+    successMessage.textContent = result.message +
+      ' Your restaurant ID is ' + result.restaurant_id + '.';
+
+    signupForm.classList.add('is-hidden');
+    signupSuccess.classList.add('is-visible');
+
+  } catch (error) {
+    alert(error.message || 'Unable to register. Please try again.');
+    submitBtn.disabled = false;
+    submitBtn.classList.remove('is-loading');
+    submitLabel.textContent = 'Register Restaurant';
+    submitIcon.style.display = 'block';
+  }
+});
+
   })();
 </script>
 

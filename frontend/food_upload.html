@@ -1239,268 +1239,590 @@
 </footer>
 
 <script>
-  (function () {
-    'use strict';
+  
+(function () {
+  'use strict';
 
-    /* ---- Navbar mobile menu ---- */
-    var navToggle = document.getElementById('navToggle');
-    var mobileMenu = document.getElementById('mobileMenu');
-    var menuIcon = document.getElementById('menuIcon');
-    var closeIcon = document.getElementById('closeIcon');
-    var isOpen = false;
+  // =========================================
+  // NAVBAR MOBILE MENU
+  // =========================================
 
-    function setMenu(open) {
-      isOpen = open;
-      navToggle.setAttribute('aria-expanded', String(open));
-      if (open) {
-        mobileMenu.classList.add('is-open');
-        menuIcon.style.display = 'none';
-        closeIcon.style.display = 'block';
-      } else {
-        mobileMenu.classList.remove('is-open');
-        menuIcon.style.display = 'block';
-        closeIcon.style.display = 'none';
-      }
-    }
-    navToggle.addEventListener('click', function () { setMenu(!isOpen); });
-    Array.prototype.forEach.call(mobileMenu.querySelectorAll('.navbar__mobile-link'), function (link) {
-      link.addEventListener('click', function () { setMenu(false); });
-    });
+  var navToggle = document.getElementById('navToggle');
+  var mobileMenu = document.getElementById('mobileMenu');
+  var menuIcon = document.getElementById('menuIcon');
+  var closeIcon = document.getElementById('closeIcon');
 
-    /* ---- Dropzone: drag & drop + browse ---- */
-    var dropzone = document.getElementById('dropzone');
-    var fileInput = document.getElementById('fileInput');
-    var dropzoneEmpty = document.getElementById('dropzoneEmpty');
-    var dropzonePreview = document.getElementById('dropzonePreview');
-    var previewImg = document.getElementById('previewImg');
-    var previewName = document.getElementById('previewName');
-    var previewMeta = document.getElementById('previewMeta');
-    var removeImageBtn = document.getElementById('removeImageBtn');
-    var thumbStrip = document.getElementById('thumbStrip');
-    var uploadError = document.getElementById('uploadError');
-    var uploadErrorText = document.getElementById('uploadErrorText');
+  var isOpen = false;
 
-    var uploadedFiles = [];
+  function setMenu(open) {
+    isOpen = open;
 
-    function formatSize(bytes) {
-      if (bytes < 1024) return bytes + ' B';
-      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(0) + ' KB';
-      return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
-    }
+    navToggle.setAttribute('aria-expanded', String(open));
 
-    function showError(msg) {
-      uploadErrorText.textContent = msg;
-      uploadError.classList.add('is-visible');
-    }
-    function clearError() {
-      uploadError.classList.remove('is-visible');
-    }
-
-    function renderPreview() {
-      if (!uploadedFiles.length) {
-        dropzone.classList.remove('has-image');
-        dropzoneEmpty.style.display = '';
-        dropzonePreview.style.display = 'none';
-        return;
-      }
-      var main = uploadedFiles[0];
-      dropzone.classList.add('has-image');
-      dropzoneEmpty.style.display = 'none';
-      dropzonePreview.style.display = 'block';
-      previewImg.src = main.url;
-      previewName.textContent = main.file.name;
-      previewMeta.textContent = formatSize(main.file.size) + (uploadedFiles.length > 1 ? ' · +' + (uploadedFiles.length - 1) + ' more photo' + (uploadedFiles.length > 2 ? 's' : '') : ' · Ready for analysis');
-
-      thumbStrip.innerHTML = '';
-      uploadedFiles.forEach(function (item, i) {
-        var thumb = document.createElement('div');
-        thumb.className = 'upload-thumb';
-        var img = document.createElement('img');
-        img.src = item.url;
-        img.alt = 'Additional photo ' + (i + 1);
-        thumb.appendChild(img);
-        thumbStrip.appendChild(thumb);
-      });
-    }
-
-    function handleFiles(fileList) {
-      clearError();
-      var valid = [];
-      Array.prototype.forEach.call(fileList, function (file) {
-        if (!file.type.startsWith('image/')) {
-          showError('"' + file.name + '" is not a supported image type.');
-          return;
-        }
-        if (file.size > 10 * 1024 * 1024) {
-          showError('"' + file.name + '" exceeds the 10MB limit.');
-          return;
-        }
-        valid.push({ file: file, url: URL.createObjectURL(file) });
-      });
-      if (valid.length) {
-        uploadedFiles = uploadedFiles.concat(valid);
-        renderPreview();
-      }
-    }
-
-    fileInput.addEventListener('change', function (e) { handleFiles(e.target.files); });
-
-    ['dragenter', 'dragover'].forEach(function (evt) {
-      dropzone.addEventListener(evt, function (e) {
-        e.preventDefault(); e.stopPropagation();
-        dropzone.classList.add('is-dragover');
-      });
-    });
-    ['dragleave', 'drop'].forEach(function (evt) {
-      dropzone.addEventListener(evt, function (e) {
-        e.preventDefault(); e.stopPropagation();
-        dropzone.classList.remove('is-dragover');
-      });
-    });
-    dropzone.addEventListener('drop', function (e) {
-      if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length) {
-        handleFiles(e.dataTransfer.files);
-      }
-    });
-
-    removeImageBtn.addEventListener('click', function (e) {
-      e.stopPropagation(); e.preventDefault();
-      uploadedFiles = [];
-      fileInput.value = '';
-      renderPreview();
-    });
-
-    /* ---- Cooking-time chip selector ---- */
-    var timeSelect = document.getElementById('timeSelect');
-    var selectedTime = '1-3';
-    timeSelect.addEventListener('click', function (e) {
-      var chip = e.target.closest('.time-chip');
-      if (!chip) return;
-      selectedTime = chip.getAttribute('data-value');
-      Array.prototype.forEach.call(timeSelect.querySelectorAll('.time-chip'), function (c) {
-        c.classList.toggle('is-active', c === chip);
-      });
-    });
-
-    /* ---- Notes character counter ---- */
-    var notes = document.getElementById('notes');
-    var notesCount = document.getElementById('notesCount');
-    notes.addEventListener('input', function () { notesCount.textContent = notes.value.length; });
-
-    /* ---- Analyze with AI ---- */
-    var uploadForm = document.getElementById('uploadForm');
-    var analyzeBtn = document.getElementById('analyzeBtn');
-    var analyzeLabel = document.getElementById('analyzeLabel');
-    var resultCard = document.getElementById('resultCard');
-
-    var CIRCUMFERENCE = 239; /* 2 * PI * r, r = 38 */
-
-    function animateRing(el, valueEl, target) {
-      el.setAttribute('stroke-dasharray', ((target / 100) * CIRCUMFERENCE) + ' ' + CIRCUMFERENCE);
-      var start = 0;
-      var step = Math.max(1, Math.round(target / 30));
-      var timer = setInterval(function () {
-        start += step;
-        if (start >= target) { start = target; clearInterval(timer); }
-        valueEl.textContent = start;
-      }, 20);
-    }
-
-    var storageLabels = {
-      'refrigerated': 'refrigerated storage',
-      'room-temp': 'room-temperature storage',
-      'hot-kept': 'hot-holding storage',
-      'frozen': 'frozen storage'
-    };
-
-    var ngoOptions = [
-      'City Food Bank — 1.2 km away',
-      'Hope Shelter — 0.8 km away',
-      'Community Kitchen — 2.1 km away',
-      'Sunrise NGO Center — 1.6 km away'
-    ];
-
-    uploadForm.addEventListener('submit', function (e) {
-      e.preventDefault();
-
-      if (!uploadedFiles.length) {
-        showError('Please upload at least one food photo before analyzing.');
-        dropzone.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        return;
-      }
-      clearError();
-
-      analyzeBtn.classList.add('is-loading');
-      analyzeBtn.disabled = true;
-      analyzeLabel.textContent = 'Analyzing Photo…';
-
-      setTimeout(function () {
-        analyzeBtn.classList.remove('is-loading');
-        analyzeBtn.disabled = false;
-        analyzeLabel.textContent = 'Analyze with AI';
-
-        /* RescueBite AI food analysis */
-        var foodNameInput = document.getElementById('foodName').value.trim();
-        var quantityInput = document.getElementById('quantity').value.trim();
-
-        var timeRisk = { '0-1': 0, '1-3': 6, '3-6': 18, '6+': 32 };
-        var baseQuality = 96 - (timeRisk[selectedTime] || 0);
-        var quality = Math.max(58, Math.min(97, baseQuality + Math.round(Math.random() * 6 - 3)));
-        var priority = Math.max(35, Math.min(95, 100 - quality + Math.round(Math.random() * 10)));
-
-        var safeHoursMap = { '0-1': '7h 45m', '1-3': '5h 15m', '3-6': '3h 20m', '6+': '1h 40m' };
-        var safeTime = safeHoursMap[selectedTime] || '4h 00m';
-
-        document.getElementById('resultFoodName').textContent = foodNameInput || 'Analyzed Food Item';
-        document.getElementById('servingsValue').textContent = quantityInput || (Math.round(12 + Math.random() * 30) + ' servings (est.)');
-        document.getElementById('safeTimeValue').textContent = safeTime;
-        document.getElementById('ngoMatch').textContent = ngoOptions[Math.floor(Math.random() * ngoOptions.length)];
-
-        animateRing(document.getElementById('qualityRing'), document.getElementById('qualityValue'), quality);
-        animateRing(document.getElementById('priorityRing'), document.getElementById('priorityValue'), priority);
-
-        resultCard.classList.add('is-visible');
-        resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 1800);
-    });
-
-    var confirmDonationBtn = document.getElementById('confirmDonationBtn');
-
-confirmDonationBtn.addEventListener('click', async function () {
-  confirmDonationBtn.disabled = true;
-  confirmDonationBtn.textContent = 'Saving Donation...';
-
-  try {
-    const response = await fetch('/api/donations', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        food_name: document.getElementById('foodName').value.trim(),
-        quantity: document.getElementById('quantity').value.trim(),
-        storage_method: document.getElementById('storageMethod').value,
-        packaging_type: document.getElementById('packagingType').value,
-        notes: document.getElementById('notes').value.trim()
-      })
-    });
-
-    const result = await response.json();
-
-    if (!response.ok) {
-      throw new Error(result.error || 'Could not save donation.');
-    }
-
-    confirmDonationBtn.innerHTML = '✓ Donation Saved Successfully!';
-
-  } catch (error) {
-    alert(error.message);
-    confirmDonationBtn.textContent = 'Confirm & Schedule Pickup';
-    confirmDonationBtn.disabled = false;
+    mobileMenu.classList.toggle('is-open', open);
+    menuIcon.style.display = open ? 'none' : 'block';
+    closeIcon.style.display = open ? 'block' : 'none';
   }
-});
-  })();
-</script>
 
+  navToggle.addEventListener('click', function () {
+    setMenu(!isOpen);
+  });
+
+  mobileMenu.querySelectorAll('.navbar__mobile-link').forEach(function (link) {
+    link.addEventListener('click', function () {
+      setMenu(false);
+    });
+  });
+
+
+  // =========================================
+  // IMAGE UPLOAD
+  // =========================================
+
+  var dropzone = document.getElementById('dropzone');
+  var fileInput = document.getElementById('fileInput');
+
+  var dropzoneEmpty = document.getElementById('dropzoneEmpty');
+  var dropzonePreview = document.getElementById('dropzonePreview');
+
+  var previewImg = document.getElementById('previewImg');
+  var previewName = document.getElementById('previewName');
+  var previewMeta = document.getElementById('previewMeta');
+
+  var removeImageBtn = document.getElementById('removeImageBtn');
+  var thumbStrip = document.getElementById('thumbStrip');
+
+  var uploadError = document.getElementById('uploadError');
+  var uploadErrorText = document.getElementById('uploadErrorText');
+
+  var uploadedFiles = [];
+
+  function formatSize(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+
+    if (bytes < 1024 * 1024) {
+      return (bytes / 1024).toFixed(0) + ' KB';
+    }
+
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+  }
+
+  function showError(message) {
+    uploadErrorText.textContent = message;
+    uploadError.classList.add('is-visible');
+  }
+
+  function clearError() {
+    uploadError.classList.remove('is-visible');
+  }
+
+  function renderPreview() {
+
+    if (!uploadedFiles.length) {
+      dropzone.classList.remove('has-image');
+
+      dropzoneEmpty.style.display = '';
+      dropzonePreview.style.display = 'none';
+
+      return;
+    }
+
+    var main = uploadedFiles[0];
+
+    dropzone.classList.add('has-image');
+
+    dropzoneEmpty.style.display = 'none';
+    dropzonePreview.style.display = 'block';
+
+    previewImg.src = main.url;
+    previewName.textContent = main.file.name;
+
+    previewMeta.textContent =
+      formatSize(main.file.size) +
+      (uploadedFiles.length > 1
+        ? ' · +' + (uploadedFiles.length - 1) + ' more photo(s)'
+        : ' · Ready for analysis');
+
+    thumbStrip.innerHTML = '';
+
+    uploadedFiles.forEach(function (item, index) {
+
+      var thumb = document.createElement('div');
+      thumb.className = 'upload-thumb';
+
+      var img = document.createElement('img');
+
+      img.src = item.url;
+      img.alt = 'Uploaded photo ' + (index + 1);
+
+      thumb.appendChild(img);
+      thumbStrip.appendChild(thumb);
+
+    });
+  }
+
+  function handleFiles(fileList) {
+
+    clearError();
+
+    var validFiles = [];
+
+    Array.from(fileList).forEach(function (file) {
+
+      if (!file.type.startsWith('image/')) {
+        showError('Please select a valid image file.');
+        return;
+      }
+
+      if (file.size > 10 * 1024 * 1024) {
+        showError('Image size must be below 10MB.');
+        return;
+      }
+
+      validFiles.push({
+        file: file,
+        url: URL.createObjectURL(file)
+      });
+
+    });
+
+    if (validFiles.length) {
+
+      uploadedFiles = uploadedFiles.concat(validFiles);
+
+      renderPreview();
+
+    }
+  }
+
+  fileInput.addEventListener('change', function (event) {
+    handleFiles(event.target.files);
+  });
+
+  ['dragenter', 'dragover'].forEach(function (eventName) {
+
+    dropzone.addEventListener(eventName, function (event) {
+
+      event.preventDefault();
+      event.stopPropagation();
+
+      dropzone.classList.add('is-dragover');
+
+    });
+
+  });
+
+  ['dragleave', 'drop'].forEach(function (eventName) {
+
+    dropzone.addEventListener(eventName, function (event) {
+
+      event.preventDefault();
+      event.stopPropagation();
+
+      dropzone.classList.remove('is-dragover');
+
+    });
+
+  });
+
+  dropzone.addEventListener('drop', function (event) {
+
+    if (event.dataTransfer && event.dataTransfer.files.length) {
+      handleFiles(event.dataTransfer.files);
+    }
+
+  });
+
+  removeImageBtn.addEventListener('click', function (event) {
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    uploadedFiles.forEach(function (item) {
+      URL.revokeObjectURL(item.url);
+    });
+
+    uploadedFiles = [];
+
+    fileInput.value = '';
+
+    renderPreview();
+    clearError();
+
+  });
+
+
+  // =========================================
+  // COOKING TIME SELECTION
+  // =========================================
+
+  var timeSelect = document.getElementById('timeSelect');
+
+  var selectedTime = '1-3';
+
+  timeSelect.addEventListener('click', function (event) {
+
+    var chip = event.target.closest('.time-chip');
+
+    if (!chip) return;
+
+    selectedTime = chip.getAttribute('data-value');
+
+    timeSelect.querySelectorAll('.time-chip').forEach(function (item) {
+
+      item.classList.toggle('is-active', item === chip);
+
+    });
+
+  });
+
+
+  // =========================================
+  // NOTES CHARACTER COUNTER
+  // =========================================
+
+  var notes = document.getElementById('notes');
+  var notesCount = document.getElementById('notesCount');
+
+  notes.addEventListener('input', function () {
+
+    notesCount.textContent = notes.value.length;
+
+  });
+
+
+  // =========================================
+  // AI RESULT ELEMENTS
+  // =========================================
+
+  var uploadForm = document.getElementById('uploadForm');
+
+  var analyzeBtn = document.getElementById('analyzeBtn');
+  var analyzeLabel = document.getElementById('analyzeLabel');
+
+  var resultCard = document.getElementById('resultCard');
+
+  var CIRCUMFERENCE = 239;
+
+  function normalizeConfidence(value) {
+
+    var confidence = Number(value);
+
+    if (!Number.isFinite(confidence)) {
+      return null;
+    }
+
+    // Models commonly return confidence between 0 and 1.
+    if (confidence >= 0 && confidence <= 1) {
+      confidence = confidence * 100;
+    }
+
+    return Math.max(0, Math.min(100, Math.round(confidence)));
+
+  }
+
+  function updateRing(ringId, valueId, confidence) {
+
+    var ring = document.getElementById(ringId);
+    var value = document.getElementById(valueId);
+
+    if (confidence === null) {
+
+      ring.setAttribute('stroke-dasharray', '0 ' + CIRCUMFERENCE);
+      value.textContent = 'N/A';
+
+      return;
+    }
+
+    var progress = (confidence / 100) * CIRCUMFERENCE;
+
+    ring.setAttribute(
+      'stroke-dasharray',
+      progress + ' ' + CIRCUMFERENCE
+    );
+
+    value.textContent = confidence;
+
+  }
+
+  function getTopPrediction(predictions) {
+
+    if (!Array.isArray(predictions) || !predictions.length) {
+      return null;
+    }
+
+    return predictions[0];
+
+  }
+
+  function updateResultLabel(elementId, text) {
+
+    var element = document.getElementById(elementId);
+
+    if (element) {
+      element.textContent = text;
+    }
+
+  }
+
+
+  // =========================================
+  // REAL AI FOOD RECOGNITION API
+  // =========================================
+
+  uploadForm.addEventListener('submit', async function (event) {
+
+    event.preventDefault();
+
+    clearError();
+
+    if (!uploadedFiles.length) {
+
+      showError('Please upload a food image before analyzing.');
+
+      dropzone.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+      });
+
+      return;
+    }
+
+    var foodName = document.getElementById('foodName').value.trim();
+    var quantity = document.getElementById('quantity').value.trim();
+
+    if (!foodName || !quantity) {
+      showError('Please enter the food name and quantity.');
+      return;
+    }
+
+    analyzeBtn.disabled = true;
+
+    analyzeBtn.classList.add('is-loading');
+
+    analyzeLabel.textContent = 'Analyzing with AI...';
+
+    try {
+
+      // Send the first selected image to Flask.
+      var formData = new FormData();
+
+      formData.append('image', uploadedFiles[0].file);
+
+      // Call actual Flask recognition endpoint.
+      var response = await fetch('/api/food/recognize', {
+
+        method: 'POST',
+
+        body: formData
+
+      });
+
+      var result = await response.json();
+
+      if (!response.ok || !result.success) {
+
+        throw new Error(
+          result.error || 'Food recognition failed.'
+        );
+
+      }
+
+      // =====================================
+      // DISPLAY BEST FOOD PREDICTION
+      // =====================================
+
+      document.getElementById('resultFoodName').textContent =
+        result.food || 'Food detected';
+
+      // =====================================
+      // INDIAN MODEL CONFIDENCE
+      // =====================================
+
+      var indianTop = getTopPrediction(
+        result.indian_predictions
+      );
+
+      var indianConfidence = indianTop
+        ? normalizeConfidence(indianTop.confidence)
+        : null;
+
+      updateRing(
+        'qualityRing',
+        'qualityValue',
+        indianConfidence
+      );
+
+      // =====================================
+      // INTERNATIONAL MODEL CONFIDENCE
+      // =====================================
+
+      var internationalTop = getTopPrediction(
+        result.international_predictions
+      );
+
+      var internationalConfidence = internationalTop
+        ? normalizeConfidence(internationalTop.confidence)
+        : null;
+
+      updateRing(
+        'priorityRing',
+        'priorityValue',
+        internationalConfidence
+      );
+
+      // =====================================
+      // UPDATE RESULT LABELS
+      // =====================================
+
+      var labels = resultCard.querySelectorAll(
+        '.result-stat__label'
+      );
+
+      if (labels[0]) {
+        labels[0].textContent = 'Indian Model Confidence';
+      }
+
+      if (labels[1]) {
+        labels[1].textContent = 'International Model Confidence';
+      }
+
+      if (labels[2]) {
+        labels[2].textContent = 'Safe Time';
+      }
+
+      if (labels[3]) {
+        labels[3].textContent = 'Quantity Provided';
+      }
+
+      // =====================================
+      // OTHER AVAILABLE INFORMATION
+      // =====================================
+
+      updateResultLabel(
+        'safeTimeValue',
+        'Not estimated'
+      );
+
+      updateResultLabel(
+        'servingsValue',
+        quantity
+      );
+
+      updateResultLabel(
+        'ngoMatch',
+        result.model_used || 'Model information unavailable'
+      );
+
+      var ngoLabel = document.querySelector(
+        '.result-card__ngo-label'
+      );
+
+      if (ngoLabel) {
+        ngoLabel.textContent = 'Best Performing Model';
+      }
+
+      // =====================================
+      // SHOW AI RESULTS
+      // =====================================
+
+      resultCard.classList.add('is-visible');
+
+      resultCard.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+
+    } catch (error) {
+
+      console.error('AI Recognition Error:', error);
+
+      showError(
+        error.message || 'Unable to connect to the AI server.'
+      );
+
+    } finally {
+
+      analyzeBtn.classList.remove('is-loading');
+
+      analyzeBtn.disabled = false;
+
+      analyzeLabel.textContent = 'Analyze with AI';
+
+    }
+
+  });
+
+
+  // =========================================
+  // CONFIRM AND SAVE DONATION
+  // =========================================
+
+  var confirmDonationBtn = document.getElementById(
+    'confirmDonationBtn'
+  );
+
+  confirmDonationBtn.addEventListener('click', async function () {
+
+    confirmDonationBtn.disabled = true;
+
+    confirmDonationBtn.textContent = 'Saving Donation...';
+
+    try {
+
+      var response = await fetch('/api/donations', {
+
+        method: 'POST',
+
+        headers: {
+          'Content-Type': 'application/json'
+        },
+
+        body: JSON.stringify({
+
+          food_name: document.getElementById('foodName').value.trim(),
+
+          quantity: document.getElementById('quantity').value.trim(),
+
+          storage_method: document.getElementById('storageMethod').value,
+
+          packaging_type: document.getElementById('packagingType').value,
+
+          notes: document.getElementById('notes').value.trim()
+
+        })
+
+      });
+
+      var result = await response.json();
+
+      if (!response.ok) {
+
+        throw new Error(
+          result.error || 'Could not save donation.'
+        );
+
+      }
+
+      confirmDonationBtn.textContent =
+        '✓ Donation Saved Successfully!';
+
+    } catch (error) {
+
+      console.error('Donation Error:', error);
+
+      alert(error.message);
+
+      confirmDonationBtn.textContent =
+        'Confirm & Schedule Pickup';
+
+      confirmDonationBtn.disabled = false;
+
+    }
+
+  });
+
+})();
+</script>
 </body>
 </html>

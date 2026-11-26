@@ -1,1169 +1,965 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NGO Dashboard — RescueBite AI</title>
+<title>NGO Dashboard - RescueBite AI</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
 <style>
-  /* ============================= */
-  /* DESIGN TOKENS (matches landing page) */
-  /* ============================= */
-  :root {
-    --font-sans: 'Inter', sans-serif;
-    --font-display: 'Plus Jakarta Sans', sans-serif;
-
-    --color-emerald-50: #ecfdf5;
-    --color-emerald-100: #d1fae5;
-    --color-emerald-200: #a7f3d0;
-    --color-emerald-300: #6ee7b7;
-    --color-emerald-500: #10b981;
-    --color-emerald-600: #059669;
-    --color-emerald-700: #047857;
-    --color-emerald-800: #065f46;
-    --color-emerald-900: #064e3b;
-
-    --color-orange-50: #fff7ed;
-    --color-orange-100: #ffedd5;
-    --color-orange-400: #fb923c;
-    --color-orange-500: #f97316;
-    --color-orange-600: #ea580c;
-    --color-orange-800: #9a3412;
-
-    --color-slate-50: #f8fafc;
-    --color-slate-100: #f1f5f9;
-    --color-slate-200: #e2e8f0;
-    --color-slate-300: #cbd5e1;
-    --color-slate-400: #94a3b8;
-    --color-slate-500: #64748b;
-    --color-slate-600: #475569;
-    --color-slate-700: #334155;
-    --color-slate-800: #1e293b;
-    --color-slate-900: #0f172a;
-
-    --color-sky-50: #f0f9ff;
-    --color-sky-100: #e0f2fe;
-    --color-sky-600: #0284c7;
-
-    --color-violet-50: #f5f3ff;
-    --color-violet-100: #ede9fe;
-    --color-violet-600: #7c3aed;
-    --color-violet-700: #6d28d9;
-
-    --color-rose-50: #fff1f2;
-    --color-rose-100: #ffe4e6;
-    --color-rose-400: #fb7185;
-    --color-rose-500: #f43f5e;
-
-    --color-amber-50: #fffbeb;
-    --color-amber-100: #fef3c7;
-    --color-amber-500: #f59e0b;
-    --color-amber-600: #d97706;
-    --color-amber-700: #b45309;
-
-    --color-teal-50: #f0fdfa;
-    --color-teal-600: #0d9488;
-
-    --color-yellow-50: #fefce8;
-    --color-yellow-200: #fef08a;
-    --color-yellow-400: #facc15;
-    --color-yellow-800: #854d0e;
-
-    --space-1: 0.25rem;  --space-2: 0.5rem;  --space-3: 0.75rem;
-    --space-4: 1rem;     --space-5: 1.25rem; --space-6: 1.5rem;
-    --space-8: 2rem;     --space-10: 2.5rem; --space-12: 3rem;
-    --space-14: 3.5rem;  --space-16: 4rem;   --space-20: 5rem; --space-24: 6rem;
-
-    --text-xs: 0.75rem;  --text-sm: 0.875rem; --text-base: 1rem;
-    --text-lg: 1.125rem; --text-xl: 1.25rem;  --text-2xl: 1.5rem;
-    --text-3xl: 1.875rem; --text-4xl: 2.25rem; --text-5xl: 3rem; --text-6xl: 3.75rem;
-
-    --radius-lg: 0.5rem; --radius-xl: 0.75rem; --radius-2xl: 1rem;
-    --radius-3xl: 1.5rem; --radius-full: 9999px;
-
-    --max-w-7xl: 80rem; --max-w-5xl: 64rem; --max-w-2xl: 42rem;
-    --max-w-xl: 36rem; --max-w-lg: 32rem; --max-w-md: 28rem; --max-w-xs: 20rem;
-  }
-
-  /* ============================= */
-  /* RESET / BASE                  */
-  /* ============================= */
-  *, *::before, *::after { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body {
+* {
+    box-sizing: border-box;
     margin: 0;
-    font-family: var(--font-sans);
-    background: var(--color-slate-50);
-    color: var(--color-slate-900);
-    -webkit-font-smoothing: antialiased;
-  }
-  img, svg { display: block; max-width: 100%; }
-  a { text-decoration: none; color: inherit; }
-  button { font-family: inherit; cursor: pointer; background: none; border: none; }
-  ul { list-style: none; margin: 0; padding: 0; }
-  h1, h2, h3, h4, p { margin: 0; }
-  input, select, textarea { font-family: inherit; }
+    padding: 0;
+}
 
-  ::-webkit-scrollbar { width: 6px; height: 6px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: var(--color-emerald-100); border-radius: 3px; }
+body {
+    font-family: Inter, sans-serif;
+    background: #f4f8f6;
+    color: #172b25;
+}
 
-  .icon { flex-shrink: 0; }
+button {
+    font-family: inherit;
+    cursor: pointer;
+}
 
-  .container {
-    max-width: var(--max-w-7xl);
-    margin: 0 auto;
-    padding: 0 var(--space-6);
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
-  }
-  @keyframes slideIn {
-    from { opacity: 0; transform: translateY(-8px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  /* ============================= */
-  /* NAVBAR (reused from landing page) */
-  /* ============================= */
-  .navbar {
-    position: sticky;
-    top: 0; left: 0; right: 0;
-    z-index: 50;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(8px);
-    box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05);
-    border-bottom: 1px solid var(--color-slate-100);
-  }
-  .navbar__inner {
-    max-width: var(--max-w-7xl);
-    margin: 0 auto;
-    padding: var(--space-4) var(--space-6);
+.layout {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-6);
-  }
-  .navbar__logo {
-    display: flex;
-    align-items: center;
-    gap: 0.625rem;
-  }
-  .navbar__logo-badge {
-    width: 2rem; height: 2rem;
-    border-radius: var(--radius-lg);
-    background: var(--color-emerald-600);
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05);
-    transition: background-color 0.2s ease;
-  }
-  .navbar__logo:hover .navbar__logo-badge { background: var(--color-emerald-700); }
-  .navbar__logo-text {
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 245px;
+    background: white;
+    border-right: 1px solid #e5eee9;
+    padding: 28px 18px;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+}
+
+.brand {
+    font-size: 22px;
+    font-weight: 800;
+    color: #059669;
+    margin-bottom: 40px;
+}
+
+.brand span {
+    color: #f97316;
+}
+
+.nav-label {
+    font-size: 11px;
+    color: #94a3a8;
     font-weight: 700;
-    color: var(--color-slate-900);
-    font-size: var(--text-lg);
-    letter-spacing: -0.01em;
-  }
-  .navbar__logo-text span { color: var(--color-emerald-600); }
+    margin: 20px 10px 12px;
+    text-transform: uppercase;
+}
 
-  .navbar__links {
-    display: flex;
-    align-items: center;
-    gap: var(--space-8);
-  }
-  .navbar__link {
-    font-size: var(--text-sm);
-    font-weight: 500;
-    color: var(--color-slate-600);
-    transition: color 0.2s ease;
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-  }
-  .navbar__link:hover { color: var(--color-slate-900); }
-  .navbar__link.is-active { color: var(--color-emerald-700); font-weight: 600; }
+.nav-link {
+    display: block;
+    padding: 13px;
+    border-radius: 9px;
+    color: #52635c;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    text-decoration: none;
+}
 
-  .navbar__right {
-    display: flex;
-    align-items: center;
-    gap: var(--space-4);
-  }
-  .navbar__icon-btn {
-    position: relative;
-    width: 2.25rem; height: 2.25rem;
-    border-radius: var(--radius-lg);
-    display: flex; align-items: center; justify-content: center;
-    color: var(--color-slate-500);
-    transition: all 0.2s ease;
-  }
-  .navbar__icon-btn:hover { background: var(--color-slate-100); color: var(--color-slate-900); }
-  .navbar__icon-dot {
+.nav-link.active,
+.nav-link:hover {
+    background: #e9f8f0;
+    color: #059669;
+}
+
+.logout {
     position: absolute;
-    top: 0.3rem; right: 0.3rem;
-    width: 0.4rem; height: 0.4rem;
-    background: var(--color-rose-500);
-    border-radius: var(--radius-full);
-    border: 1.5px solid #fff;
-  }
-  .navbar__profile {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-    padding-left: var(--space-4);
-    border-left: 1px solid var(--color-slate-100);
-  }
-  .navbar__avatar {
-    width: 2.25rem; height: 2.25rem;
-    border-radius: var(--radius-full);
-    background: var(--color-emerald-600);
-    color: #fff;
-    display: flex; align-items: center; justify-content: center;
-    font-weight: 700;
-    font-size: var(--text-sm);
-  }
-  .navbar__profile-name { font-size: var(--text-sm); font-weight: 600; color: var(--color-slate-900); }
-  .navbar__profile-role { font-size: var(--text-xs); color: var(--color-slate-400); }
+    bottom: 25px;
+    left: 18px;
+    right: 18px;
+    width: calc(100% - 36px);
+    border: none;
+    background: #fff1f1;
+    color: #dc5656;
+    text-align: left;
+}
 
-  /* ============================= */
-  /* DASHBOARD HEADER               */
-  /* ============================= */
-  .dash-header {
-    padding: var(--space-10) 0 var(--space-6);
-  }
-  .dash-header__row {
+.main {
+    margin-left: 245px;
+    width: calc(100% - 245px);
+    padding: 32px;
+}
+
+.topbar {
     display: flex;
-    align-items: flex-end;
     justify-content: space-between;
-    flex-wrap: wrap;
-    gap: var(--space-4);
-  }
-  .dash-header__pill {
-    display: inline-flex;
     align-items: center;
-    gap: var(--space-2);
-    background: var(--color-emerald-50);
-    border: 1px solid var(--color-emerald-100);
-    border-radius: var(--radius-full);
-    padding: 0.375rem var(--space-4);
-    margin-bottom: var(--space-3);
-  }
-  .dash-header__pill-text {
-    font-size: var(--text-xs);
-    font-weight: 600;
-    color: var(--color-emerald-700);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-  .dash-header__pulse-dot {
-    width: 0.4rem; height: 0.4rem;
-    background: var(--color-emerald-500);
-    border-radius: var(--radius-full);
-    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  }
-  .dash-header__title {
-    font-family: var(--font-display);
-    font-size: var(--text-3xl);
+    margin-bottom: 28px;
+    gap: 15px;
+}
+
+.topbar h1 {
+    font-size: 25px;
     font-weight: 800;
-    color: var(--color-slate-900);
-    letter-spacing: -0.02em;
-  }
-  .dash-header__sub {
-    font-size: var(--text-sm);
-    color: var(--color-slate-500);
-    margin-top: var(--space-2);
-  }
-  .btn-primary {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    font-size: var(--text-sm);
-    font-weight: 600;
-    background: var(--color-emerald-600);
-    color: #fff;
-    padding: var(--space-2) 1.25rem;
-    border-radius: var(--radius-lg);
-    transition: background-color 0.2s ease;
-    box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05);
-  }
-  .btn-primary:hover { background: var(--color-emerald-700); }
-  .btn-secondary {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    color: var(--color-slate-700);
-    font-weight: 600;
-    font-size: var(--text-sm);
-    padding: var(--space-2) var(--space-4);
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--color-slate-200);
-    transition: all 0.2s ease;
-    background: #fff;
-  }
-  .btn-secondary:hover { color: var(--color-slate-900); border-color: var(--color-slate-300); background: var(--color-slate-50); }
+}
 
-  /* ============================= */
-  /* STAT CARDS                    */
-  /* ============================= */
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: var(--space-5);
-    margin-bottom: var(--space-8);
-  }
-  .stat-card {
-    background: #fff;
-    border-radius: var(--radius-2xl);
-    padding: var(--space-6);
-    border: 1px solid var(--color-slate-100);
-    box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05);
-    transition: all 0.2s ease;
-  }
-  .stat-card:hover { box-shadow: 0 10px 15px -3px rgba(241,245,249,0.8); transform: translateY(-2px); }
-  .stat-card__top {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    margin-bottom: var(--space-5);
-  }
-  .stat-card__icon {
-    width: 2.75rem; height: 2.75rem;
-    border-radius: var(--radius-xl);
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05);
-  }
-  .stat-card__trend {
-    font-size: var(--text-xs);
+.topbar p {
+    color: #81918a;
+    font-size: 13px;
+    margin-top: 7px;
+}
+
+.user {
+    background: white;
+    border: 1px solid #e5eee9;
+    padding: 12px 17px;
+    border-radius: 10px;
+    font-size: 13px;
     font-weight: 700;
-    padding: 0.125rem var(--space-2);
-    border-radius: var(--radius-full);
-    display: flex;
-    align-items: center;
-    gap: 0.2rem;
-  }
-  .stat-card__trend--up { background: var(--color-emerald-50); color: var(--color-emerald-700); }
-  .stat-card__trend--down { background: var(--color-rose-50); color: var(--color-rose-500); }
-  .stat-card__value {
-    font-family: var(--font-display);
-    font-size: var(--text-3xl);
+}
+
+.welcome {
+    background: linear-gradient(120deg, #047857, #10b981);
+    padding: 30px;
+    border-radius: 16px;
+    color: white;
+    margin-bottom: 25px;
+}
+
+.welcome h2 {
+    font-size: 23px;
+    margin-bottom: 9px;
+}
+
+.welcome p {
+    font-size: 13px;
+    opacity: .9;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 25px;
+}
+
+.stat {
+    background: white;
+    border: 1px solid #e8efeb;
+    border-radius: 13px;
+    padding: 21px;
+}
+
+.stat-label {
+    font-size: 11px;
+    color: #84928c;
+    font-weight: 700;
+}
+
+.stat-number {
+    font-size: 29px;
     font-weight: 800;
-    color: var(--color-slate-900);
-    margin-bottom: var(--space-1);
-    letter-spacing: -0.01em;
-  }
-  .stat-card__label {
-    font-size: var(--text-sm);
-    font-weight: 600;
-    color: var(--color-slate-700);
-    margin-bottom: var(--space-1);
-  }
-  .stat-card__desc {
-    font-size: var(--text-xs);
-    color: var(--color-slate-400);
-    line-height: 1.6;
-  }
+    margin-top: 12px;
+}
 
-  /* ============================= */
-  /* MAIN DASHBOARD GRID            */
-  /* ============================= */
-  .dash-grid {
-    display: grid;
-    grid-template-columns: 1.6fr 1fr;
-    gap: var(--space-6);
-    padding-bottom: var(--space-20);
-    align-items: start;
-  }
-  .dash-col { display: flex; flex-direction: column; gap: var(--space-6); }
+.panel {
+    background: white;
+    border: 1px solid #e8efeb;
+    border-radius: 13px;
+    padding: 23px;
+    margin-bottom: 22px;
+}
 
-  .panel {
-    background: #fff;
-    border-radius: var(--radius-2xl);
-    border: 1px solid var(--color-slate-100);
-    box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05);
-    overflow: hidden;
-  }
-  .panel__header {
+.panel-header {
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    padding: var(--space-5) var(--space-6);
-    border-bottom: 1px solid var(--color-slate-50);
-  }
-  .panel__title-group { display: flex; align-items: center; gap: var(--space-3); }
-  .panel__title {
-    font-size: var(--text-base);
-    font-weight: 700;
-    color: var(--color-slate-900);
-  }
-  .panel__title-sub {
-    font-size: var(--text-xs);
-    color: var(--color-slate-400);
-    margin-top: 0.125rem;
-  }
-  .panel__live-badge {
-    display: inline-flex;
     align-items: center;
-    gap: 0.375rem;
-    background: var(--color-emerald-50);
-    border: 1px solid var(--color-emerald-100);
-    border-radius: var(--radius-full);
-    padding: 0.25rem 0.625rem;
-  }
-  .panel__live-dot {
-    width: 0.375rem; height: 0.375rem;
-    background: var(--color-emerald-500);
-    border-radius: var(--radius-full);
-    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  }
-  .panel__live-text {
-    font-size: 0.625rem;
+    margin-bottom: 20px;
+    gap: 10px;
+}
+
+.panel-header h3 {
+    font-size: 17px;
+}
+
+.refresh-btn {
+    background: #e9f8f0;
+    color: #059669;
+    border: none;
+    border-radius: 8px;
+    padding: 9px 13px;
+    font-size: 12px;
     font-weight: 700;
-    color: var(--color-emerald-700);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-  .panel__link {
-    font-size: var(--text-xs);
-    font-weight: 600;
-    color: var(--color-emerald-600);
-    transition: color 0.2s ease;
-  }
-  .panel__link:hover { color: var(--color-emerald-700); }
-  .panel__body { padding: var(--space-4) var(--space-6) var(--space-6); }
+}
 
-  /* ---- Live donation feed ---- */
-  .feed-list {
+.request-card {
+    border: 1px solid #e5eee9;
+    border-radius: 12px;
+    padding: 19px;
+    margin-bottom: 15px;
+}
+
+.request-top {
     display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
-    max-height: 26rem;
-    overflow-y: auto;
-    padding-right: var(--space-1);
-  }
-  .feed-item {
-    display: flex;
+    justify-content: space-between;
     align-items: flex-start;
-    gap: var(--space-3);
-    padding: var(--space-3);
-    border-radius: var(--radius-xl);
-    border: 1px solid var(--color-slate-50);
-    transition: all 0.2s ease;
-    animation: slideIn 0.4s ease;
-  }
-  .feed-item:hover { background: var(--color-slate-50); border-color: var(--color-slate-100); }
-  .feed-item__icon {
-    width: 2.5rem; height: 2.5rem;
-    border-radius: var(--radius-xl);
-    display: flex; align-items: center; justify-content: center;
-    font-size: var(--text-lg);
-    flex-shrink: 0;
-  }
-  .feed-item__body { flex: 1; min-width: 0; }
-  .feed-item__top { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); }
-  .feed-item__title { font-size: var(--text-sm); font-weight: 600; color: var(--color-slate-900); }
-  .feed-item__time { font-size: 0.625rem; color: var(--color-slate-400); white-space: nowrap; flex-shrink: 0; }
-  .feed-item__desc { font-size: var(--text-xs); color: var(--color-slate-500); margin-top: 0.125rem; line-height: 1.5; }
-  .feed-item__tags { display: flex; gap: var(--space-2); margin-top: var(--space-2); flex-wrap: wrap; }
-  .feed-tag {
-    font-size: 0.625rem;
-    font-weight: 600;
-    border-radius: var(--radius-full);
-    padding: 0.125rem var(--space-2);
-    border: 1px solid;
-  }
+    gap: 12px;
+    margin-bottom: 15px;
+}
 
-  /* ---- Nearby donation requests ---- */
-  .request-grid {
+.request-top h4 {
+    font-size: 16px;
+    margin-bottom: 6px;
+}
+
+.restaurant-name {
+    font-size: 12px;
+    color: #059669;
+    font-weight: 700;
+}
+
+.status {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.status.pending {
+    background: #fff4dc;
+    color: #a66a00;
+}
+
+.status.accepted {
+    background: #e5f8ed;
+    color: #07834e;
+}
+
+.status.declined {
+    background: #fff0f0;
+    color: #d34c4c;
+}
+
+.details-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-4);
-  }
-  .request-card {
-    border: 1px solid var(--color-slate-100);
-    border-radius: var(--radius-2xl);
-    padding: var(--space-5);
-    transition: all 0.2s ease;
-  }
-  .request-card:hover { box-shadow: 0 4px 6px -1px rgba(0,0,0,0.07); transform: translateY(-2px); }
-  .request-card__top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: var(--space-3); }
-  .request-card__resto { display: flex; align-items: center; gap: var(--space-3); }
-  .request-card__emoji {
-    width: 2.75rem; height: 2.75rem;
-    border-radius: var(--radius-xl);
-    background: var(--color-orange-50);
-    display: flex; align-items: center; justify-content: center;
-    font-size: var(--text-xl);
-  }
-  .request-card__name { font-size: var(--text-sm); font-weight: 700; color: var(--color-slate-900); }
-  .request-card__loc { font-size: var(--text-xs); color: var(--color-slate-400); margin-top: 0.125rem; }
-  .request-card__priority {
-    font-size: 0.625rem;
-    font-weight: 700;
-    padding: 0.2rem var(--space-2);
-    border-radius: var(--radius-full);
-  }
-  .request-card__priority--high { background: var(--color-rose-50); color: var(--color-rose-500); }
-  .request-card__priority--med { background: var(--color-amber-50); color: var(--color-amber-600); }
-  .request-card__meta {
-    display: flex;
-    align-items: center;
-    gap: var(--space-4);
-    margin: var(--space-3) 0;
-    padding: var(--space-3) 0;
-    border-top: 1px solid var(--color-slate-50);
-    border-bottom: 1px solid var(--color-slate-50);
-  }
-  .request-card__meta-item { display: flex; align-items: center; gap: 0.375rem; }
-  .request-card__meta-val { font-size: var(--text-xs); font-weight: 600; color: var(--color-slate-700); }
-  .request-card__actions { display: flex; gap: var(--space-2); }
-  .btn-accept {
-    flex: 1;
-    text-align: center;
-    font-size: var(--text-xs);
-    font-weight: 700;
-    background: var(--color-emerald-600);
-    color: #fff;
-    padding: 0.5rem;
-    border-radius: var(--radius-lg);
-    transition: background-color 0.2s ease;
-  }
-  .btn-accept:hover { background: var(--color-emerald-700); }
-  .btn-decline {
-    font-size: var(--text-xs);
-    font-weight: 700;
-    color: var(--color-slate-500);
-    padding: 0.5rem var(--space-3);
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--color-slate-200);
-    transition: all 0.2s ease;
-  }
-  .btn-decline:hover { background: var(--color-slate-50); color: var(--color-slate-700); }
+    gap: 12px;
+    background: #f8fbf9;
+    padding: 15px;
+    border-radius: 9px;
+}
 
-  /* ---- Analytics chart ---- */
-  .chart-tabs { display: flex; gap: var(--space-2); }
-  .chart-tab {
-    font-size: var(--text-xs);
+.detail-label {
+    font-size: 10px;
+    color: #8a9992;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.detail-value {
+    font-size: 12px;
     font-weight: 600;
-    color: var(--color-slate-400);
-    padding: 0.25rem var(--space-3);
-    border-radius: var(--radius-full);
-    transition: all 0.2s ease;
-  }
-  .chart-tab.is-active { background: var(--color-emerald-50); color: var(--color-emerald-700); }
-  .chart-wrap { padding: var(--space-2) 0 0; }
-  .chart-bars {
-    display: flex;
-    align-items: flex-end;
-    gap: var(--space-3);
-    height: 9rem;
-  }
-  .chart-bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: var(--space-2); height: 100%; justify-content: flex-end; }
-  .chart-bar {
-    width: 100%;
-    max-width: 2.25rem;
-    background: linear-gradient(to top, var(--color-emerald-600), var(--color-emerald-300));
-    border-radius: var(--radius-lg) var(--radius-lg) 0.25rem 0.25rem;
-    transition: opacity 0.2s ease;
-  }
-  .chart-bar-col:hover .chart-bar { opacity: 0.85; }
-  .chart-bar-label { font-size: 0.625rem; color: var(--color-slate-400); font-weight: 600; }
-  .chart-legend {
-    display: flex;
-    justify-content: space-between;
-    margin-top: var(--space-5);
-    padding-top: var(--space-5);
-    border-top: 1px solid var(--color-slate-50);
-  }
-  .chart-legend__item { text-align: center; }
-  .chart-legend__val { font-family: var(--font-display); font-size: var(--text-xl); font-weight: 800; color: var(--color-slate-900); }
-  .chart-legend__lbl { font-size: 0.625rem; color: var(--color-slate-400); font-weight: 600; margin-top: 0.125rem; }
+    overflow-wrap: anywhere;
+}
 
-  /* ---- AI recommendations ---- */
-  .ai-list { display: flex; flex-direction: column; gap: var(--space-3); }
-  .ai-card {
-    border-radius: var(--radius-xl);
-    padding: var(--space-4);
-    border: 1px solid var(--color-violet-100);
-    background: linear-gradient(135deg, var(--color-violet-50), #fff 65%);
-  }
-  .ai-card__top { display: flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-2); }
-  .ai-card__icon {
-    width: 1.75rem; height: 1.75rem;
-    border-radius: var(--radius-lg);
-    background: var(--color-violet-600);
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-  }
-  .ai-card__title { font-size: var(--text-xs); font-weight: 700; color: var(--color-violet-700); text-transform: uppercase; letter-spacing: 0.04em; }
-  .ai-card__desc { font-size: var(--text-sm); color: var(--color-slate-700); line-height: 1.6; }
-  .ai-card__desc strong { color: var(--color-slate-900); }
-  .ai-card__action {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-1);
-    margin-top: var(--space-3);
-    font-size: var(--text-xs);
+.restaurant-contact {
+    margin-top: 14px;
+    font-size: 12px;
+    line-height: 1.9;
+    color: #687a71;
+}
+
+.request-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 17px;
+}
+
+.accept-btn,
+.decline-btn {
+    border: none;
+    border-radius: 8px;
+    padding: 11px 18px;
+    font-size: 12px;
     font-weight: 700;
-    color: var(--color-violet-700);
-  }
+}
 
-  /* ---- Nearby restaurants list ---- */
-  .resto-list { display: flex; flex-direction: column; }
-  .resto-row {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-    padding: var(--space-3) 0;
-    border-bottom: 1px solid var(--color-slate-50);
-  }
-  .resto-row:last-child { border-bottom: none; }
-  .resto-row__avatar {
-    width: 2.25rem; height: 2.25rem;
-    border-radius: var(--radius-full);
-    background: var(--color-sky-50);
-    display: flex; align-items: center; justify-content: center;
-    font-size: var(--text-base);
-    flex-shrink: 0;
-  }
-  .resto-row__body { flex: 1; min-width: 0; }
-  .resto-row__name { font-size: var(--text-sm); font-weight: 600; color: var(--color-slate-900); }
-  .resto-row__meta { font-size: 0.7rem; color: var(--color-slate-400); }
-  .resto-row__dist { font-size: var(--text-xs); font-weight: 700; color: var(--color-emerald-600); white-space: nowrap; }
+.accept-btn {
+    background: #059669;
+    color: white;
+}
 
-  /* ============================= */
-  /* FOOTER (reused pattern)        */
-  /* ============================= */
-  .footer {
-    background: var(--color-slate-900);
-    padding: var(--space-10) 0;
-  }
-  .footer__inner {
+.accept-btn:hover {
+    background: #047857;
+}
+
+.decline-btn {
+    background: #fff0f0;
+    color: #dc5656;
+}
+
+.decline-btn:hover {
+    background: #ffe0e0;
+}
+
+.accept-btn:disabled,
+.decline-btn:disabled {
+    opacity: .55;
+    cursor: not-allowed;
+}
+
+.empty {
+    text-align: center;
+    color: #899790;
+    padding: 35px 10px;
+    font-size: 13px;
+}
+
+.message {
+    display: none;
+    padding: 13px;
+    border-radius: 9px;
+    margin-bottom: 15px;
+    font-size: 13px;
+}
+
+.message.error {
+    display: block;
+    background: #fff0f0;
+    color: #c03939;
+}
+
+.message.success {
+    display: block;
+    background: #e5f8ed;
+    color: #07834e;
+}
+
+.profile-row {
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    flex-wrap: wrap;
-    gap: var(--space-4);
-  }
-  .footer__brand-logo { display: flex; align-items: center; gap: 0.625rem; }
-  .footer__brand-badge {
-    width: 2rem; height: 2rem;
-    border-radius: var(--radius-lg);
-    background: var(--color-emerald-600);
-    display: flex; align-items: center; justify-content: center;
-  }
-  .footer__brand-text { font-weight: 700; color: #fff; font-size: var(--text-lg); }
-  .footer__brand-text span { color: var(--color-emerald-500); }
-  .footer__copyright { font-size: var(--text-xs); color: var(--color-slate-400); }
+    gap: 15px;
+    padding: 13px 0;
+    border-bottom: 1px solid #edf1ee;
+    font-size: 12px;
+}
 
-  /* ============================= */
-  /* RESPONSIVE                    */
-  /* ============================= */
-  @media (max-width: 1200px) {
-    .stats-grid { grid-template-columns: repeat(3, 1fr); }
-  }
-  @media (max-width: 1024px) {
-    .dash-grid { grid-template-columns: 1fr; }
-    .navbar__links { display: none; }
-  }
-  @media (max-width: 720px) {
-    .stats-grid { grid-template-columns: repeat(2, 1fr); }
-    .request-grid { grid-template-columns: 1fr; }
-    .dash-header__row { align-items: flex-start; }
-    .navbar__profile-name, .navbar__profile-role { display: none; }
-  }
-  @media (max-width: 480px) {
-    .stats-grid { grid-template-columns: 1fr; }
-  }
+.profile-row span:first-child {
+    color: #87948e;
+}
+
+.profile-row strong {
+    text-align: right;
+    overflow-wrap: anywhere;
+}
+
+.footer {
+    text-align: center;
+    color: #9aa7a1;
+    font-size: 11px;
+    margin-top: 30px;
+}
+
+@media(max-width: 1050px) {
+    .stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media(max-width: 650px) {
+    .sidebar {
+        width: 65px;
+        padding: 20px 7px;
+    }
+
+    .brand {
+        font-size: 0;
+        text-align: center;
+    }
+
+    .brand:first-letter {
+        font-size: 22px;
+    }
+
+    .nav-label {
+        font-size: 0;
+    }
+
+    .nav-link {
+        font-size: 0;
+        text-align: center;
+        padding: 14px 3px;
+    }
+
+    .logout {
+        left: 7px;
+        right: 7px;
+        width: calc(100% - 14px);
+        font-size: 0;
+        text-align: center;
+    }
+
+    .main {
+        margin-left: 65px;
+        width: calc(100% - 65px);
+        padding: 18px 12px;
+    }
+
+    .topbar h1 {
+        font-size: 18px;
+    }
+
+    .user {
+        font-size: 10px;
+    }
+
+    .welcome {
+        padding: 21px;
+    }
+
+    .welcome h2 {
+        font-size: 18px;
+    }
+
+    .stats {
+        gap: 9px;
+    }
+
+    .stat {
+        padding: 14px;
+    }
+
+    .stat-number {
+        font-size: 23px;
+    }
+
+    .panel {
+        padding: 15px;
+    }
+
+    .details-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .request-top {
+        flex-direction: column;
+    }
+
+    .request-actions {
+        flex-wrap: wrap;
+    }
+}
 </style>
 </head>
+
 <body>
 
-<!-- ============================= -->
-<!-- NAVBAR                        -->
-<!-- ============================= -->
-<header class="navbar">
-  <div class="navbar__inner">
-    <a href="#" class="navbar__logo">
-      <div class="navbar__logo-badge">
-        <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
-      </div>
-      <span class="navbar__logo-text">RescueBite<span> AI</span></span>
+<div class="layout">
+
+<aside class="sidebar">
+
+    <div class="brand">Rescue<span>Bite</span> AI</div>
+
+    <div class="nav-label">Main Menu</div>
+
+    <a href="/ngo_dashboard.html" class="nav-link active">
+        ⌂ Dashboard
     </a>
 
-    <nav class="navbar__links">
-      <a href="#" class="navbar__link is-active">
-        <svg class="icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
-        Overview
-      </a>
-      <a href="#" class="navbar__link">Pickups</a>
-      <a href="#" class="navbar__link">Donations</a>
-      <a href="#" class="navbar__link">Analytics</a>
-      <a href="#" class="navbar__link">Restaurants</a>
-    </nav>
+    <a href="#requests" class="nav-link">
+        ♡ Donation Requests
+    </a>
 
-    <div class="navbar__right">
-      <button class="navbar__icon-btn" aria-label="Notifications">
-        <span class="navbar__icon-dot"></span>
-        <svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></svg>
-      </button>
-      <button class="navbar__icon-btn" aria-label="Settings">
-        <svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
-      </button>
-      <div class="navbar__profile">
-        <div class="navbar__avatar">HK</div>
+    <a href="#profile" class="nav-link">
+        ♙ NGO Profile
+    </a>
+
+    <button class="nav-link logout" id="logoutBtn">
+        ↪ Logout
+    </button>
+
+</aside>
+
+<main class="main">
+
+    <header class="topbar">
         <div>
-          <div class="navbar__profile-name">Hope Kitchen</div>
-          <div class="navbar__profile-role">NGO Partner</div>
+            <h1>NGO Dashboard</h1>
+            <p>Manage incoming food donation requests.</p>
         </div>
-      </div>
-    </div>
-  </div>
-</header>
 
-<main class="container">
-
-  <!-- ============================= -->
-  <!-- DASHBOARD HEADER               -->
-  <!-- ============================= -->
-  <section class="dash-header">
-    <div class="dash-header__row">
-      <div>
-        <div class="dash-header__pill">
-          <span class="dash-header__pulse-dot"></span>
-          <span class="dash-header__pill-text">Live Dashboard</span>
+        <div class="user" id="ngoName">
+            Loading NGO...
         </div>
-        <h1 class="dash-header__title">Welcome back, Hope Kitchen 👋</h1>
-        <p class="dash-header__sub">Here's what's happening with your food rescue operations today.</p>
-      </div>
-      <div style="display:flex; gap: var(--space-3);">
-        <button class="btn-secondary">
-          <svg class="icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3"/><path d="M6 15v4a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-4"/><path d="m8 11 4 4 4-4"/></svg>
-          Export Report
-        </button>
-        <button class="btn-primary">
-          <svg class="icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-          New Pickup Request
-        </button>
-      </div>
-    </div>
-  </section>
+    </header>
 
-  <!-- ============================= -->
-  <!-- STAT CARDS                     -->
-  <!-- ============================= -->
-  <section class="stats-grid">
-    <div class="stat-card">
-      <div class="stat-card__top">
-        <div class="stat-card__icon" style="background: var(--color-emerald-50);">
-          <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-        </div>
-        <span class="stat-card__trend stat-card__trend--up">
-          <svg class="icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg>
-          12%
-        </span>
-      </div>
-      <div class="stat-card__value" id="statIncome">₹0</div>
-      <div class="stat-card__label">Income Donations</div>
-      <div class="stat-card__desc">Monetary contributions this month</div>
-    </div>
+    <section class="welcome">
+        <h2>Welcome back, <span id="welcomeName">NGO</span>! 👋</h2>
+        <p>Review restaurant donation requests and help connect surplus food with people in need.</p>
+    </section>
 
-    <div class="stat-card">
-      <div class="stat-card__top">
-        <div class="stat-card__icon" style="background: var(--color-orange-50);">
-          <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg>
-        </div>
-        <span class="stat-card__trend stat-card__trend--up">
-          <svg class="icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg>
-          5%
-        </span>
-      </div>
-      <div class="stat-card__value" id="statPickups">0</div>
-      <div class="stat-card__label">Active Pickups</div>
-      <div class="stat-card__desc">Currently en route or scheduled</div>
-    </div>
+    <section class="stats">
 
-    <div class="stat-card">
-      <div class="stat-card__top">
-        <div class="stat-card__icon" style="background: var(--color-sky-50);">
-          <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11 3 3L22 4"/></svg>
+        <div class="stat">
+            <div class="stat-label">TOTAL REQUESTS</div>
+            <div class="stat-number" id="totalRequests">0</div>
         </div>
-        <span class="stat-card__trend stat-card__trend--up">
-          <svg class="icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg>
-          18%
-        </span>
-      </div>
-      <div class="stat-card__value" id="statCompleted">0</div>
-      <div class="stat-card__label">Completed Donations</div>
-      <div class="stat-card__desc">Successfully delivered this month</div>
-    </div>
 
-    <div class="stat-card">
-      <div class="stat-card__top">
-        <div class="stat-card__icon" style="background: var(--color-violet-50);">
-          <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="3"/><path d="M12 21.7C17.3 17 20 13 20 10a8 8 0 1 0-16 0c0 3 2.7 7 8 11.7Z"/></svg>
+        <div class="stat">
+            <div class="stat-label">PENDING REQUESTS</div>
+            <div class="stat-number" id="pendingRequests">0</div>
         </div>
-        <span class="stat-card__trend stat-card__trend--down">
-          <svg class="icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m19 12-7 7-7-7"/><path d="M12 5v14"/></svg>
-          2%
-        </span>
-      </div>
-      <div class="stat-card__value" id="statRestaurants">0</div>
-      <div class="stat-card__label">Nearby Restaurants</div>
-      <div class="stat-card__desc">Partner locations within 5 km</div>
+
+        <div class="stat">
+            <div class="stat-label">ACCEPTED REQUESTS</div>
+            <div class="stat-number" id="acceptedRequests">0</div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-label">DECLINED REQUESTS</div>
+            <div class="stat-number" id="declinedRequests">0</div>
+        </div>
+
+    </section>
+
+    <section class="panel" id="requests">
+
+        <div class="panel-header">
+            <h3>Incoming Donation Requests</h3>
+
+            <button class="refresh-btn" id="refreshBtn">
+                ↻ Refresh
+            </button>
+        </div>
+
+        <div id="messageBox" class="message"></div>
+
+        <div id="requestsContainer">
+            <div class="empty">Loading donation requests...</div>
+        </div>
+
+    </section>
+
+    <section class="panel" id="profile">
+
+        <div class="panel-header">
+            <h3>NGO Profile</h3>
+        </div>
+
+        <div class="profile-row">
+            <span>NGO Name</span>
+            <strong id="profileName">Loading...</strong>
+        </div>
+
+        <div class="profile-row">
+            <span>Registration Number</span>
+            <strong id="profileRegistration">—</strong>
+        </div>
+
+        <div class="profile-row">
+            <span>Contact Person</span>
+            <strong id="profileContact">—</strong>
+        </div>
+
+        <div class="profile-row">
+            <span>Email</span>
+            <strong id="profileEmail">—</strong>
+        </div>
+
+        <div class="profile-row">
+            <span>Phone</span>
+            <strong id="profilePhone">—</strong>
+        </div>
+
+        <div class="profile-row">
+            <span>Address</span>
+            <strong id="profileAddress">—</strong>
+        </div>
+
+    </section>
+
+    <div class="footer">
+        © 2026 RescueBite AI · Reducing Food Waste, Fighting Hunger.
     </div>
 
-    <div class="stat-card">
-      <div class="stat-card__top">
-        <div class="stat-card__icon" style="background: var(--color-amber-50);">
-          <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.21 13.89 7 23l5-3 5 3-1.21-9.12"/><circle cx="12" cy="8" r="7"/></svg>
-        </div>
-        <span class="stat-card__trend stat-card__trend--up">
-          <svg class="icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg>
-          24%
-        </span>
-      </div>
-      <div class="stat-card__value" id="statMeals">0</div>
-      <div class="stat-card__label">Today's Meals</div>
-      <div class="stat-card__desc">Portions served so far today</div>
-    </div>
-  </section>
-
-  <!-- ============================= -->
-  <!-- MAIN DASHBOARD GRID             -->
-  <!-- ============================= -->
-  <div class="dash-grid">
-
-    <!-- LEFT / MAIN COLUMN -->
-    <div class="dash-col">
-
-      <!-- Live donation feed -->
-      <div class="panel">
-        <div class="panel__header">
-          <div class="panel__title-group">
-            <div>
-              <div class="panel__title">Live Donation Feed</div>
-              <div class="panel__title-sub">Real-time updates from partner restaurants</div>
-            </div>
-          </div>
-          <span class="panel__live-badge">
-            <span class="panel__live-dot"></span>
-            <span class="panel__live-text">Live</span>
-          </span>
-        </div>
-        <div class="panel__body">
-          <div class="feed-list" id="feedList"></div>
-        </div>
-      </div>
-
-      <!-- Nearby donation requests -->
-      <div class="panel">
-        <div class="panel__header">
-          <div class="panel__title-group">
-            <div>
-              <div class="panel__title">Nearby Donation Requests</div>
-              <div class="panel__title-sub">Pending pickups within your service radius</div>
-            </div>
-          </div>
-          <a href="#" class="panel__link">View all →</a>
-        </div>
-        <div class="panel__body">
-          <div class="request-grid" id="requestGrid"></div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- RIGHT COLUMN -->
-    <div class="dash-col">
-
-      <!-- Analytics -->
-      <div class="panel">
-        <div class="panel__header">
-          <div class="panel__title-group">
-            <div class="panel__title">Weekly Analytics</div>
-          </div>
-          <div class="chart-tabs">
-            <span class="chart-tab is-active">Meals</span>
-            <span class="chart-tab">Weight</span>
-          </div>
-        </div>
-        <div class="panel__body">
-          <div class="chart-wrap">
-            <div class="chart-bars" id="chartBars"></div>
-            <div class="chart-legend">
-              <div class="chart-legend__item">
-                <div class="chart-legend__val">2,840</div>
-                <div class="chart-legend__lbl">MEALS THIS WEEK</div>
-              </div>
-              <div class="chart-legend__item">
-                <div class="chart-legend__val">96%</div>
-                <div class="chart-legend__lbl">ON-TIME RATE</div>
-              </div>
-              <div class="chart-legend__item">
-                <div class="chart-legend__val">18</div>
-                <div class="chart-legend__lbl">PARTNERS</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- AI Recommendations -->
-      <div class="panel">
-        <div class="panel__header">
-          <div class="panel__title-group">
-            <div class="panel__title">AI Recommendations</div>
-            <div class="panel__title-sub">Suggested actions based on live data</div>
-          </div>
-        </div>
-        <div class="panel__body">
-          <div class="ai-list">
-            <div class="ai-card">
-              <div class="ai-card__top">
-                <div class="ai-card__icon">
-                  <svg class="icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
-                </div>
-                <span class="ai-card__title">Priority Alert</span>
-              </div>
-              <p class="ai-card__desc"><strong>Green Bites Café</strong> has a batch expiring in 45 minutes — dispatch a rider now to avoid waste.</p>
-              <span class="ai-card__action">Assign rider →</span>
-            </div>
-
-            <div class="ai-card">
-              <div class="ai-card__top">
-                <div class="ai-card__icon">
-                  <svg class="icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838a.5.5 0 0 1-.62-.62l.838-2.872a2 2 0 0 1 .506-.854z"/></svg>
-                </div>
-                <span class="ai-card__title">Capacity Match</span>
-              </div>
-              <p class="ai-card__desc">Based on today's volume, <strong>Sunrise Bakery's</strong> surplus best matches your storage capacity.</p>
-              <span class="ai-card__action">Request donation →</span>
-            </div>
-
-            <div class="ai-card">
-              <div class="ai-card__top">
-                <div class="ai-card__icon">
-                  <svg class="icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="m19 9-5 5-4-4-3 3"/></svg>
-                </div>
-                <span class="ai-card__title">Trend Insight</span>
-              </div>
-              <p class="ai-card__desc">Pickup volume typically rises <strong>32% on Fridays</strong> — consider scheduling an extra volunteer shift.</p>
-              <span class="ai-card__action">Schedule shift →</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Nearby restaurants -->
-      <div class="panel">
-        <div class="panel__header">
-          <div class="panel__title-group">
-            <div class="panel__title">Nearby Restaurants</div>
-          </div>
-          <a href="#" class="panel__link">See map →</a>
-        </div>
-        <div class="panel__body">
-          <div class="resto-list" id="restoList"></div>
-        </div>
-      </div>
-
-    </div>
-  </div>
 </main>
-
-<!-- ============================= -->
-<!-- FOOTER                        -->
-<!-- ============================= -->
-<footer class="footer">
-  <div class="container">
-    <div class="footer__inner">
-      <div class="footer__brand-logo">
-        <div class="footer__brand-badge">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
-        </div>
-        <span class="footer__brand-text">RescueBite<span> AI</span></span>
-      </div>
-      <p class="footer__copyright">© 2026 RescueBite AI. NGO Partner Dashboard.</p>
-    </div>
-  </div>
-</footer>
+</div>
 
 <script>
-(function () {
-  'use strict';
+const requestsContainer =
+    document.getElementById("requestsContainer");
 
-  /* ---------- Animated stat counters ---------- */
-  function animateValue(el, start, end, duration, prefix, suffix) {
-    prefix = prefix || ''; suffix = suffix || '';
-    var startTime = null;
-    function step(ts) {
-      if (!startTime) startTime = ts;
-      var progress = Math.min((ts - startTime) / duration, 1);
-      var eased = 1 - Math.pow(1 - progress, 3);
-      var value = Math.floor(start + (end - start) * eased);
-      el.textContent = prefix + value.toLocaleString('en-IN') + suffix;
-      if (progress < 1) requestAnimationFrame(step);
+const messageBox =
+    document.getElementById("messageBox");
+
+let currentRequests = [];
+
+function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    })[char]);
+}
+
+function showMessage(message, type = "success") {
+    messageBox.textContent = message;
+    messageBox.className = "message " + type;
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+function clearMessage() {
+    messageBox.textContent = "";
+    messageBox.className = "message";
+}
+
+async function loadNGOProfile() {
+
+    const response = await fetch("/api/ngos/me", {
+        credentials: "same-origin"
+    });
+
+    if (response.status === 401 || response.status === 404) {
+        window.location.href = "/ngo_login.html";
+        return false;
     }
-    requestAnimationFrame(step);
-  }
 
-  animateValue(document.getElementById('statIncome'), 0, 184500, 1200, '₹');
-  animateValue(document.getElementById('statPickups'), 0, 14, 1000);
-  animateValue(document.getElementById('statCompleted'), 0, 362, 1200);
-  animateValue(document.getElementById('statRestaurants'), 0, 47, 1000);
-  animateValue(document.getElementById('statMeals'), 0, 1180, 1200);
+    const result = await response.json();
 
-  /* ---------- Weekly chart ---------- */
-  var chartData = [
-    { day: 'Mon', val: 62 }, { day: 'Tue', val: 78 }, { day: 'Wed', val: 55 },
-    { day: 'Thu', val: 90 }, { day: 'Fri', val: 100 }, { day: 'Sat', val: 70 }, { day: 'Sun', val: 45 }
-  ];
-  var chartBars = document.getElementById('chartBars');
-  chartData.forEach(function (d) {
-    var col = document.createElement('div');
-    col.className = 'chart-bar-col';
-    var bar = document.createElement('div');
-    bar.className = 'chart-bar';
-    bar.style.height = '0%';
-    var label = document.createElement('div');
-    label.className = 'chart-bar-label';
-    label.textContent = d.day;
-    col.appendChild(bar);
-    col.appendChild(label);
-    chartBars.appendChild(col);
-    setTimeout(function () { bar.style.transition = 'height 0.8s ease'; bar.style.height = d.val + '%'; }, 100);
-  });
-
-  /* ---------- Nearby restaurants ---------- */
-  var restaurants = [
-    { emoji: '🍝', name: 'Sunrise Bakery', meta: 'Bakery · Partner since 2024', dist: '0.6 km' },
-    { emoji: '🍜', name: 'Green Bites Café', meta: 'Multi-cuisine · Verified', dist: '1.2 km' },
-    { emoji: '🍛', name: 'Spice Route Kitchen', meta: 'Indian · Verified', dist: '1.8 km' },
-    { emoji: '🥗', name: 'Urban Salad Bar', meta: 'Healthy Food · New Partner', dist: '2.4 km' },
-    { emoji: '🍕', name: 'Napoli Pizza Co.', meta: 'Italian · Verified', dist: '3.1 km' }
-  ];
-  var restoList = document.getElementById('restoList');
-  restaurants.forEach(function (r) {
-    var row = document.createElement('div');
-    row.className = 'resto-row';
-    row.innerHTML =
-      '<div class="resto-row__avatar">' + r.emoji + '</div>' +
-      '<div class="resto-row__body">' +
-        '<div class="resto-row__name">' + r.name + '</div>' +
-        '<div class="resto-row__meta">' + r.meta + '</div>' +
-      '</div>' +
-      '<div class="resto-row__dist">' + r.dist + '</div>';
-    restoList.appendChild(row);
-  });
-
-  /* ---------- Nearby donation requests ---------- */
-  var requests = [
-    { emoji: '🍛', name: 'Spice Route Kitchen', loc: '1.8 km away', priority: 'high', servings: '35 portions', time: '2h 10m left' },
-    { emoji: '🥖', name: 'Sunrise Bakery', loc: '0.6 km away', priority: 'med', servings: '48 portions', time: '6h 40m left' },
-    { emoji: '🍕', name: 'Napoli Pizza Co.', loc: '3.1 km away', priority: 'med', servings: '20 portions', time: '4h 05m left' },
-    { emoji: '🥗', name: 'Urban Salad Bar', loc: '2.4 km away', priority: 'high', servings: '15 portions', time: '1h 30m left' }
-  ];
-  var requestGrid = document.getElementById('requestGrid');
-  requests.forEach(function (r) {
-    var card = document.createElement('div');
-    card.className = 'request-card';
-    var priorityClass = r.priority === 'high' ? 'request-card__priority--high' : 'request-card__priority--med';
-    var priorityLabel = r.priority === 'high' ? 'HIGH PRIORITY' : 'MEDIUM';
-    card.innerHTML =
-      '<div class="request-card__top">' +
-        '<div class="request-card__resto">' +
-          '<div class="request-card__emoji">' + r.emoji + '</div>' +
-          '<div>' +
-            '<div class="request-card__name">' + r.name + '</div>' +
-            '<div class="request-card__loc">' + r.loc + '</div>' +
-          '</div>' +
-        '</div>' +
-        '<span class="request-card__priority ' + priorityClass + '">' + priorityLabel + '</span>' +
-      '</div>' +
-      '<div class="request-card__meta">' +
-        '<div class="request-card__meta-item"><span class="request-card__meta-val">' + r.servings + '</span></div>' +
-        '<div class="request-card__meta-item"><span class="request-card__meta-val">' + r.time + '</span></div>' +
-      '</div>' +
-      '<div class="request-card__actions">' +
-        '<button class="btn-accept">Accept Pickup</button>' +
-        '<button class="btn-decline">Decline</button>' +
-      '</div>';
-    requestGrid.appendChild(card);
-
-    card.querySelector('.btn-accept').addEventListener('click', function (e) {
-      var btn = e.currentTarget;
-      btn.textContent = '✓ Accepted';
-      btn.style.background = 'var(--color-emerald-700)';
-      card.querySelectorAll('button').forEach(function (b) { b.disabled = true; b.style.opacity = '0.7'; b.style.cursor = 'default'; });
-    });
-    card.querySelector('.btn-decline').addEventListener('click', function () {
-      card.style.opacity = '0.4';
-      card.style.pointerEvents = 'none';
-    });
-  });
-
-  /* ---------- Live donation feed (simulated real-time) ---------- */
-  var feedEvents = [
-    { icon: '🍛', bg: 'var(--color-emerald-50)', title: 'New donation posted', desc: 'City Diner listed 28 portions of vegetable pulao.', tags: [['Verified', 'var(--color-emerald-50)', 'var(--color-emerald-700)', 'var(--color-emerald-100)']] },
-    { icon: '🚚', bg: 'var(--color-sky-50)', title: 'Pickup en route', desc: 'Rider Aman is heading to Sunrise Bakery — ETA 12 min.', tags: [['In Transit', 'var(--color-sky-50)', 'var(--color-sky-600)', 'var(--color-sky-100)']] },
-    { icon: '✅', bg: 'var(--color-emerald-50)', title: 'Delivery completed', desc: '42 meals delivered to Hope Shelter successfully.', tags: [['Completed', 'var(--color-emerald-50)', 'var(--color-emerald-700)', 'var(--color-emerald-100)']] },
-    { icon: '⚠️', bg: 'var(--color-amber-50)', title: 'Expiry window closing', desc: 'Napoli Pizza Co. donation expires in 45 minutes.', tags: [['Urgent', 'var(--color-rose-50)', 'var(--color-rose-500)', 'var(--color-rose-100)']] },
-    { icon: '💰', bg: 'var(--color-violet-50)', title: 'Monetary donation received', desc: 'An anonymous donor contributed ₹5,000 to your fund.', tags: [['Income', 'var(--color-violet-50)', 'var(--color-violet-600)', 'var(--color-violet-100)']] },
-    { icon: '🏪', bg: 'var(--color-orange-50)', title: 'New restaurant partner', desc: 'Urban Salad Bar joined as a verified donor near you.', tags: [['New Partner', 'var(--color-orange-50)', 'var(--color-orange-600)', 'var(--color-orange-100)']] }
-  ];
-
-  var feedList = document.getElementById('feedList');
-  var feedCount = 0;
-
-  function timeLabel(mins) {
-    if (mins < 1) return 'Just now';
-    if (mins === 1) return '1 min ago';
-    return mins + ' mins ago';
-  }
-
-  function addFeedItem() {
-    var e = feedEvents[Math.floor(Math.random() * feedEvents.length)];
-    var item = document.createElement('div');
-    item.className = 'feed-item';
-    var tagsHtml = e.tags.map(function (t) {
-      return '<span class="feed-tag" style="background:' + t[1] + '; color:' + t[2] + '; border-color:' + t[3] + ';">' + t[0] + '</span>';
-    }).join('');
-    item.innerHTML =
-      '<div class="feed-item__icon" style="background:' + e.bg + ';">' + e.icon + '</div>' +
-      '<div class="feed-item__body">' +
-        '<div class="feed-item__top">' +
-          '<span class="feed-item__title">' + e.title + '</span>' +
-          '<span class="feed-item__time">Just now</span>' +
-        '</div>' +
-        '<div class="feed-item__desc">' + e.desc + '</div>' +
-        '<div class="feed-item__tags">' + tagsHtml + '</div>' +
-      '</div>';
-    feedList.insertBefore(item, feedList.firstChild);
-    feedCount++;
-
-    /* age older items' timestamps */
-    var items = feedList.querySelectorAll('.feed-item');
-    items.forEach(function (el, idx) {
-      if (idx === 0) return;
-      var timeEl = el.querySelector('.feed-item__time');
-      timeEl.textContent = timeLabel(idx * 2);
-    });
-
-    /* cap the feed length */
-    while (feedList.children.length > 8) {
-      feedList.removeChild(feedList.lastChild);
+    if (!response.ok) {
+        throw new Error(result.error || "Could not load NGO profile.");
     }
-  }
 
-  /* seed initial feed */
-  for (var i = 0; i < 5; i++) addFeedItem();
-  /* keep it "live" */
-  setInterval(addFeedItem, 6000);
+    const ngo = result.ngo;
+    const name = ngo.ngo_name || "NGO";
 
-})();
+    document.getElementById("ngoName").textContent = name;
+    document.getElementById("welcomeName").textContent = name;
+    document.getElementById("profileName").textContent = name;
+
+    document.getElementById("profileRegistration").textContent =
+        ngo.registration_number || "—";
+
+    document.getElementById("profileContact").textContent =
+        ngo.contact_person || "—";
+
+    document.getElementById("profileEmail").textContent =
+        ngo.email || "—";
+
+    document.getElementById("profilePhone").textContent =
+        ngo.phone || "—";
+
+    document.getElementById("profileAddress").textContent =
+        ngo.address || "—";
+
+    return true;
+}
+
+async function loadRequests() {
+
+    clearMessage();
+
+    requestsContainer.innerHTML =
+        '<div class="empty">Loading donation requests...</div>';
+
+    const response = await fetch("/api/ngos/requests", {
+        credentials: "same-origin"
+    });
+
+    if (response.status === 401) {
+        window.location.href = "/ngo_login.html";
+        return;
+    }
+
+    const result = await response.json();
+
+    if (!response.ok) {
+        throw new Error(result.error || "Could not load requests.");
+    }
+
+    currentRequests = result.requests || [];
+
+    updateStatistics();
+    renderRequests();
+}
+
+function updateStatistics() {
+
+    const pending = currentRequests.filter(
+        item => item.request_status === "pending"
+    ).length;
+
+    const accepted = currentRequests.filter(
+        item => item.request_status === "accepted"
+    ).length;
+
+    const declined = currentRequests.filter(
+        item => item.request_status === "declined"
+    ).length;
+
+    document.getElementById("totalRequests").textContent =
+        currentRequests.length;
+
+    document.getElementById("pendingRequests").textContent =
+        pending;
+
+    document.getElementById("acceptedRequests").textContent =
+        accepted;
+
+    document.getElementById("declinedRequests").textContent =
+        declined;
+}
+
+function renderRequests() {
+
+    if (currentRequests.length === 0) {
+        requestsContainer.innerHTML = `
+            <div class="empty">
+                <div style="font-size:35px;margin-bottom:12px">📭</div>
+                No donation requests received yet.
+            </div>
+        `;
+        return;
+    }
+
+    requestsContainer.innerHTML = currentRequests.map(item => {
+
+        const status = String(
+            item.request_status || "pending"
+        ).toLowerCase();
+
+        const requestId = Number(item.request_id);
+
+        const safeId = Number.isInteger(requestId)
+            ? requestId
+            : 0;
+
+        const date = item.requested_at
+            ? new Date(item.requested_at.replace(" ", "T")).toLocaleString()
+            : "—";
+
+        const address = [
+            item.restaurant_address,
+            item.restaurant_city
+        ].filter(Boolean).join(", ");
+
+        const buttons = status === "pending" ? `
+            <div class="request-actions">
+                <button class="accept-btn"
+                    onclick="respondToRequest(${safeId}, 'accepted')">
+                    ✓ Accept Request
+                </button>
+
+                <button class="decline-btn"
+                    onclick="respondToRequest(${safeId}, 'declined')">
+                    ✕ Decline Request
+                </button>
+            </div>
+        ` : "";
+
+        return `
+            <article class="request-card">
+
+                <div class="request-top">
+                    <div>
+                        <h4>${escapeHTML(item.food_name)}</h4>
+                        <div class="restaurant-name">
+                            🏪 ${escapeHTML(item.restaurant_name)}
+                        </div>
+                    </div>
+
+                    <span class="status ${escapeHTML(status)}">
+                        ${escapeHTML(status)}
+                    </span>
+                </div>
+
+                <div class="details-grid">
+
+                    <div>
+                        <div class="detail-label">Quantity</div>
+                        <div class="detail-value">
+                            ${escapeHTML(item.quantity)}
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="detail-label">Storage Method</div>
+                        <div class="detail-value">
+                            ${escapeHTML(item.storage_method || "Not specified")}
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="detail-label">Packaging</div>
+                        <div class="detail-value">
+                            ${escapeHTML(item.packaging_type || "Not specified")}
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="detail-label">Request Date</div>
+                        <div class="detail-value">
+                            ${escapeHTML(date)}
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="restaurant-contact">
+                    <strong>Restaurant Contact</strong><br>
+                    Contact Person: ${escapeHTML(item.owner_name || "—")}<br>
+                    Phone: ${escapeHTML(item.restaurant_phone || "—")}<br>
+                    Email: ${escapeHTML(item.restaurant_email || "—")}<br>
+                    Address: ${escapeHTML(address || "—")}
+                </div>
+
+                ${item.notes ? `
+                    <div class="restaurant-contact">
+                        <strong>Additional Notes:</strong>
+                        ${escapeHTML(item.notes)}
+                    </div>
+                ` : ""}
+
+                ${buttons}
+
+            </article>
+        `;
+
+    }).join("");
+}
+
+async function respondToRequest(requestId, action) {
+
+    const actionLabel = action === "accepted"
+        ? "accept"
+        : "decline";
+
+    if (!confirm(`Are you sure you want to ${actionLabel} this donation request?`)) {
+        return;
+    }
+
+    const buttons = document.querySelectorAll(
+        `.request-card button`
+    );
+
+    buttons.forEach(button => button.disabled = true);
+
+    try {
+
+        const response = await fetch(
+            `/api/ngos/requests/${requestId}/respond`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                credentials: "same-origin",
+                body: JSON.stringify({
+                    action: action
+                })
+            }
+        );
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                result.error || "Could not process request."
+            );
+        }
+
+        showMessage(result.message, "success");
+
+        await loadRequests();
+
+    } catch (error) {
+
+        showMessage(error.message, "error");
+
+        buttons.forEach(button => button.disabled = false);
+    }
+}
+
+document.getElementById("refreshBtn").addEventListener(
+    "click",
+    async () => {
+        try {
+            await loadRequests();
+        } catch (error) {
+            showMessage(error.message, "error");
+        }
+    }
+);
+
+document.getElementById("logoutBtn").addEventListener(
+    "click",
+    async () => {
+
+        if (!confirm("Are you sure you want to log out?")) {
+            return;
+        }
+
+        try {
+
+            const response = await fetch("/api/logout", {
+                method: "POST",
+                credentials: "same-origin"
+            });
+
+            if (!response.ok) {
+                alert("Logout failed. Please try again.");
+                return;
+            }
+
+            window.location.href = "/ngo_login.html";
+
+        } catch (error) {
+            alert("Could not connect to the server.");
+        }
+    }
+);
+
+async function initializeDashboard() {
+
+    try {
+
+        const loggedIn = await loadNGOProfile();
+
+        if (!loggedIn) return;
+
+        await loadRequests();
+
+    } catch (error) {
+
+        console.error("NGO dashboard error:", error);
+
+        requestsContainer.innerHTML = `
+            <div class="empty">
+                Unable to load dashboard data.
+                Please refresh the page.
+            </div>
+        `;
+
+        showMessage(error.message, "error");
+    }
+}
+
+initializeDashboard();
 </script>
 
 </body>

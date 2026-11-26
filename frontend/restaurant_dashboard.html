@@ -1,0 +1,497 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Restaurant Dashboard - RescueBite AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,sans-serif;background:#f4f8f6;color:#172b25}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:250px;background:#fff;border-right:1px solid #e5eee9;padding:25px 17px;position:fixed;top:0;bottom:0}
+.brand{font-size:21px;font-weight:800;color:#059669;margin-bottom:38px;padding-left:10px}
+.brand span{color:#f97316}
+.nav-label{font-size:11px;color:#94a3a8;font-weight:700;margin:20px 10px 10px;text-transform:uppercase;letter-spacing:1px}
+.nav-link{display:flex;align-items:center;gap:12px;padding:13px 12px;border-radius:9px;color:#52635c;font-size:14px;font-weight:600;margin:4px 0;transition:.2s;background:transparent;border:0;width:100%;text-align:left}
+.nav-link:hover,.nav-link.active{background:#e9f8f0;color:#059669}
+.logout{position:absolute;bottom:25px;left:17px;right:17px;color:#dc5656;width:calc(100% - 34px)}
+.main{margin-left:250px;width:calc(100% - 250px);padding:32px 38px}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px}
+.topbar h1{font-size:25px;font-weight:800}
+.topbar p{font-size:13px;color:#81918a;margin-top:7px}
+.user{background:white;padding:11px 16px;border-radius:10px;font-size:13px;font-weight:600;border:1px solid #e5eee9}
+.welcome{background:linear-gradient(120deg,#047857,#10b981);padding:30px;border-radius:17px;color:white;margin-bottom:25px}
+.welcome h2{font-size:23px;margin-bottom:9px}
+.welcome p{font-size:14px;opacity:.9}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:17px;margin-bottom:27px}
+.stat{background:white;border:1px solid #e8efeb;border-radius:13px;padding:22px}
+.stat .label{font-size:12px;color:#84928c;font-weight:600}
+.stat .number{font-size:29px;font-weight:800;margin-top:12px;color:#172b25}
+.stat .small{font-size:11px;color:#059669;margin-top:7px}
+.content-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:20px}
+.panel{background:white;border:1px solid #e8efeb;border-radius:13px;padding:23px;margin-bottom:20px}
+.panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.panel h3{font-size:16px}
+.view-all{font-size:12px;color:#059669;font-weight:700}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.action{border:1px solid #e5eee9;border-radius:11px;padding:17px;transition:.2s}
+.action:hover{border-color:#10b981;background:#f4fcf7}
+.action .emoji{font-size:23px;margin-bottom:12px}
+.action strong{display:block;font-size:13px;margin-bottom:6px}
+.action p{font-size:11px;color:#81918a;line-height:1.6}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;color:#8a9992;font-size:11px;padding:12px 8px;border-bottom:1px solid #edf1ee}
+td{font-size:12px;padding:14px 8px;border-bottom:1px solid #f0f3f1}
+.status{display:inline-block;padding:5px 9px;border-radius:20px;background:#e8f8ef;color:#07834e;font-size:10px;font-weight:700}
+.empty{text-align:center;color:#899790;padding:28px 5px;font-size:13px}
+.profile-row{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid #edf1ee;font-size:12px}
+.profile-row span:first-child{color:#87948e}
+.footer{text-align:center;color:#9aa7a1;font-size:11px;margin-top:28px}
+.request-select{padding:9px;border:1px solid #dce8e1;border-radius:7px;width:100%;font-family:inherit;font-size:12px;background:white;margin-bottom:7px}
+.send-btn{background:#059669;color:white;border:0;border-radius:7px;padding:9px 12px;font-size:11px;font-weight:700;width:100%}
+.send-btn:hover{background:#047857}
+.send-btn:disabled{opacity:.5;cursor:not-allowed}
+.message{font-size:11px;margin-top:7px;line-height:1.5}
+.success-message{color:#07834e}
+.error-message{color:#dc5656}
+.request-panel{margin-top:20px}
+.request-table-wrap{overflow-x:auto}
+.request-table{min-width:620px}
+@media(max-width:1000px){.stats{grid-template-columns:repeat(2,1fr)}.content-grid{grid-template-columns:1fr}}
+@media(max-width:650px){
+.sidebar{width:65px;padding:20px 8px}
+.brand{font-size:0;padding:0;text-align:center}
+.brand:first-letter{font-size:22px}
+.nav-link{justify-content:center;font-size:0;padding:14px 5px}
+.nav-link .nav-icon{font-size:19px}
+.nav-label{font-size:0;margin:15px 0}
+.logout{left:8px;right:8px;width:49px}
+.main{margin-left:65px;width:calc(100% - 65px);padding:20px 13px}
+.topbar h1{font-size:19px}
+.topbar{align-items:flex-start;gap:10px}
+.user{font-size:10px}
+.stats{gap:9px}
+.stat{padding:14px}
+.stat .number{font-size:23px}
+.welcome{padding:21px}
+.welcome h2{font-size:19px}
+.actions{grid-template-columns:1fr}
+.panel{padding:14px;overflow-x:auto}
+table{min-width:400px}
+}
+</style>
+</head>
+
+<body>
+<div class="layout">
+
+<aside class="sidebar">
+  <div class="brand">Rescue<span>Bite</span> AI</div>
+  <div class="nav-label">Main Menu</div>
+  <a href="/restaurant_dashboard.html" class="nav-link active"><span class="nav-icon">⌂</span> Dashboard</a>
+  <a href="/food_upload.html" class="nav-link"><span class="nav-icon">＋</span> Add Food Donation</a>
+  <a href="/ai_analysis_results.html" class="nav-link"><span class="nav-icon">✦</span> AI Analysis</a>
+  <a href="/donation_history.html" class="nav-link"><span class="nav-icon">◷</span> Donation History</a>
+
+  <div class="nav-label">Account</div>
+  <a href="#profile" class="nav-link"><span class="nav-icon">♙</span> Restaurant Profile</a>
+  <button class="nav-link logout" id="logoutBtn"><span class="nav-icon">↪</span> Logout</button>
+</aside>
+
+<main class="main">
+
+<header class="topbar">
+  <div>
+    <h1>Restaurant Dashboard</h1>
+    <p>Manage your surplus food donations with RescueBite AI.</p>
+  </div>
+  <div class="user" id="restaurantName">Loading restaurant...</div>
+</header>
+
+<section class="welcome">
+  <h2>Welcome back, <span id="welcomeName">Restaurant</span>! 👋</h2>
+  <p>Every meal you donate brings us closer to a hunger-free community.</p>
+</section>
+
+<section class="stats">
+  <div class="stat">
+    <div class="label">TOTAL DONATIONS</div>
+    <div class="number" id="totalDonations">—</div>
+    <div class="small">All submitted donations</div>
+  </div>
+  <div class="stat">
+    <div class="label">AVAILABLE DONATIONS</div>
+    <div class="number" id="availableDonations">—</div>
+    <div class="small">Currently available</div>
+  </div>
+  <div class="stat">
+    <div class="label">COMPLETED DONATIONS</div>
+    <div class="number" id="completedDonations">—</div>
+    <div class="small">Successfully completed</div>
+  </div>
+  <div class="stat">
+    <div class="label">OTHER STATUSES</div>
+    <div class="number" id="otherDonations">—</div>
+    <div class="small">Pending or processing</div>
+  </div>
+</section>
+
+<div class="content-grid">
+
+<section>
+
+<div class="panel">
+  <div class="panel-header"><h3>Quick Actions</h3></div>
+  <div class="actions">
+    <a href="/food_upload.html" class="action">
+      <div class="emoji">🍱</div>
+      <strong>Add Food Donation</strong>
+      <p>Upload surplus food and submit a donation.</p>
+    </a>
+    <a href="/ai_analysis_results.html" class="action">
+      <div class="emoji">🤖</div>
+      <strong>AI Food Analysis</strong>
+      <p>View food recognition and AI analysis.</p>
+    </a>
+    <a href="/donation_history.html" class="action">
+      <div class="emoji">📋</div>
+      <strong>Donation History</strong>
+      <p>Review your previously submitted donations.</p>
+    </a>
+    <a href="#profile" class="action">
+      <div class="emoji">🏪</div>
+      <strong>Restaurant Profile</strong>
+      <p>View your registered restaurant details.</p>
+    </a>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="panel-header">
+    <h3>Recent Donations</h3>
+    <a href="/donation_history.html" class="view-all">View All →</a>
+  </div>
+  <div class="request-table-wrap">
+    <table>
+      <thead>
+        <tr><th>FOOD</th><th>QUANTITY</th><th>STATUS</th></tr>
+      </thead>
+      <tbody id="recentDonations">
+        <tr><td colspan="3" class="empty">Loading donations...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="panel request-panel">
+  <div class="panel-header">
+    <h3>Send Food to an NGO</h3>
+  </div>
+  <p style="font-size:12px;color:#81918a;line-height:1.7;margin-bottom:15px">
+    Select an available donation and choose an NGO to send your donation request.
+  </p>
+  <div class="request-table-wrap">
+    <table class="request-table">
+      <thead>
+        <tr>
+          <th>FOOD</th>
+          <th>QUANTITY</th>
+          <th>SELECT NGO AND SEND</th>
+        </tr>
+      </thead>
+      <tbody id="sendRequestRows">
+        <tr><td colspan="3" class="empty">Loading available donations...</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div id="requestGlobalMessage" class="message"></div>
+</div>
+
+</section>
+
+<section>
+
+<div class="panel" id="profile">
+  <div class="panel-header"><h3>Restaurant Profile</h3></div>
+  <div class="profile-row">
+    <span>Restaurant Name</span>
+    <strong id="profileName">Loading...</strong>
+  </div>
+  <div class="profile-row">
+    <span>Account Status</span>
+    <strong style="color:#059669">Logged In</strong>
+  </div>
+  <div class="profile-row">
+    <span>Platform</span>
+    <strong>RescueBite AI</strong>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="panel-header"><h3>Donation Impact</h3></div>
+  <div style="font-size:35px;margin-bottom:12px">💚</div>
+  <p style="font-size:13px;line-height:1.8;color:#718078">
+    Your food donations help reduce food waste and connect surplus food with people who need it.
+  </p>
+  <a href="/food_upload.html" class="view-all" style="display:inline-block;margin-top:17px">
+    Donate Food →
+  </a>
+</div>
+
+</section>
+</div>
+
+<div class="footer">© 2026 RescueBite AI · Reducing Food Waste, Fighting Hunger.</div>
+</main>
+</div>
+
+<script>
+let allDonations = [];
+let allNGOs = [];
+
+function escapeHTML(value) {
+  return String(value ?? '').replace(/[&<>"']/g, char => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  })[char]);
+}
+
+async function loadDashboard() {
+  try {
+    const restaurantResponse = await fetch('/api/restaurants/me');
+
+    if (restaurantResponse.status === 401) {
+      window.location.href = '/restaurant_login.html';
+      return;
+    }
+
+    const restaurantData = await restaurantResponse.json();
+
+    if (!restaurantResponse.ok) {
+      throw new Error(restaurantData.error || 'Could not load restaurant.');
+    }
+
+    const restaurant = restaurantData.restaurant;
+    const name = restaurant.restaurant_name || 'Restaurant';
+
+    document.getElementById('restaurantName').textContent = name;
+    document.getElementById('welcomeName').textContent = name;
+    document.getElementById('profileName').textContent = name;
+
+    await Promise.all([
+      loadDonations(),
+      loadNGOs()
+    ]);
+
+  } catch (error) {
+    console.error('Dashboard error:', error);
+    document.getElementById('recentDonations').innerHTML =
+      '<tr><td colspan="3" class="empty">Unable to load dashboard data. Please refresh.</td></tr>';
+  }
+}
+
+async function loadDonations() {
+  const response = await fetch('/api/donations');
+
+  if (response.status === 401) {
+    window.location.href = '/restaurant_login.html';
+    return;
+  }
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.error || 'Could not load donations.');
+  }
+
+  allDonations = data.donations || [];
+
+  const available = allDonations.filter(d =>
+    String(d.status || '').toLowerCase() === 'available'
+  ).length;
+
+  const completed = allDonations.filter(d =>
+    ['completed', 'delivered'].includes(String(d.status || '').toLowerCase())
+  ).length;
+
+  document.getElementById('totalDonations').textContent = allDonations.length;
+  document.getElementById('availableDonations').textContent = available;
+  document.getElementById('completedDonations').textContent = completed;
+  document.getElementById('otherDonations').textContent =
+    allDonations.length - available - completed;
+
+  const recent = allDonations.slice(0, 5);
+  const tbody = document.getElementById('recentDonations');
+
+  if (recent.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="3" class="empty">No donations yet. Start by adding a food donation!</td></tr>';
+  } else {
+    tbody.innerHTML = recent.map(d => `
+      <tr>
+        <td>${escapeHTML(d.food_name || 'Food donation')}</td>
+        <td>${escapeHTML(d.quantity || '—')}</td>
+        <td><span class="status">${escapeHTML(d.status || 'Unknown')}</span></td>
+      </tr>
+    `).join('');
+  }
+
+  renderSendRequestRows();
+}
+
+async function loadNGOs() {
+  const tbody = document.getElementById('sendRequestRows');
+
+  try {
+    const response = await fetch('/api/ngos/list');
+
+    if (response.status === 401) {
+      window.location.href = '/restaurant_login.html';
+      return;
+    }
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Could not load NGOs.');
+    }
+
+    allNGOs = data.ngos || [];
+    renderSendRequestRows();
+
+  } catch (error) {
+    console.error('NGO loading error:', error);
+    tbody.innerHTML = `
+      <tr><td colspan="3" class="empty">
+        Unable to load NGOs. Check whether the /api/ngos/list API has been added to app.py.
+      </td></tr>`;
+  }
+}
+
+function renderSendRequestRows() {
+  const tbody = document.getElementById('sendRequestRows');
+
+  const availableDonations = allDonations.filter(d =>
+    String(d.status || '').toLowerCase() === 'available'
+  );
+
+  if (availableDonations.length === 0) {
+    tbody.innerHTML = `
+      <tr><td colspan="3" class="empty">
+        No available donations. Add a food donation first.
+      </td></tr>`;
+    return;
+  }
+
+  if (allNGOs.length === 0) {
+    tbody.innerHTML = `
+      <tr><td colspan="3" class="empty">
+        No registered NGOs found. Please register an NGO first.
+      </td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = availableDonations.map(d => {
+    const options = allNGOs.map(ngo =>
+      `<option value="${Number(ngo.id)}">${escapeHTML(ngo.ngo_name)}</option>`
+    ).join('');
+
+    return `
+      <tr>
+        <td>${escapeHTML(d.food_name || 'Food donation')}</td>
+        <td>${escapeHTML(d.quantity || '—')}</td>
+        <td>
+          <select class="request-select" id="ngo-${Number(d.id)}">
+            <option value="">Select NGO</option>
+            ${options}
+          </select>
+          <button class="send-btn" id="send-${Number(d.id)}"
+            onclick="sendDonationRequest(${Number(d.id)})">
+            Send Request
+          </button>
+          <div id="message-${Number(d.id)}" class="message"></div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+async function sendDonationRequest(donationId) {
+  const select = document.getElementById(`ngo-${donationId}`);
+  const button = document.getElementById(`send-${donationId}`);
+  const message = document.getElementById(`message-${donationId}`);
+
+  const ngoId = select.value;
+
+  if (!ngoId) {
+    message.className = 'message error-message';
+    message.textContent = 'Please select an NGO first.';
+    return;
+  }
+
+  button.disabled = true;
+  button.textContent = 'Sending...';
+  message.textContent = '';
+
+  try {
+    const response = await fetch('/api/donation-requests', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        donation_id: donationId,
+        ngo_id: Number(ngoId)
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Could not send donation request.');
+    }
+
+    message.className = 'message success-message';
+    message.textContent = 'Request sent successfully to the selected NGO!';
+
+    button.textContent = 'Request Sent';
+    select.disabled = true;
+
+  } catch (error) {
+    message.className = 'message error-message';
+    message.textContent = error.message;
+    button.disabled = false;
+    button.textContent = 'Send Request';
+  }
+}
+
+document.getElementById('logoutBtn').addEventListener('click', async () => {
+  if (!confirm('Are you sure you want to log out?')) return;
+
+  try {
+    const response = await fetch('/api/logout', { method: 'POST' });
+
+    if (!response.ok) {
+      alert('Logout failed. Please try again.');
+      return;
+    }
+
+    window.location.href = '/restaurant_login.html';
+
+  } catch (error) {
+    alert('Could not connect to the server.');
+  }
+});
+
+loadDashboard();
+</script>
+
+</body>
+</html>

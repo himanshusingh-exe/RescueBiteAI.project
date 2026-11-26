@@ -878,13 +878,17 @@ async function loadDonations() {
         cat: d.storage_method || 'Food Donation',
         emoji: '🍱',
         servings: d.quantity,
-        ngo: 'Not assigned',
+        ngo: d.ngo_name || 'Not assigned',
         dist: '—',
         date: date,
         dateISO: date.getFullYear() + '-' +
           String(date.getMonth() + 1).padStart(2, '0') + '-' +
           String(date.getDate()).padStart(2, '0'),
-        status: d.status === 'available' ? 'pending' : d.status
+          status: d.request_status === 'accepted'
+  ? 'accepted'
+  : d.status === 'available'
+    ? 'pending'
+    : d.status
       };
     });
 

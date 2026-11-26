@@ -25,9 +25,10 @@ from db import get_db_connection
 # =====================================================
 # PROJECT CONFIGURATION
 # =====================================================
+from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-FRONTEND_DIR = BASE_DIR / "frontend"
+BASE_DIR = Path(__file__).resolve().parent
+FRONTEND_DIR = BASE_DIR.parent / "frontend"
 
 UPLOAD_FOLDER = BASE_DIR / "uploads"
 UPLOAD_FOLDER.mkdir(exist_ok=True)
@@ -504,6 +505,58 @@ def get_logged_in_ngo():
         connection.close()
 
 # =====================================================
+# ADMIN - LOGIN
+# =====================================================
+
+@app.post("/api/admin/login")
+def admin_login():
+    data = request.get_json(silent=True) or {}
+
+    username = data.get("username", "").strip()
+    password = data.get("password", "")
+
+    if not username or not password:
+        return jsonify({"error": "Username and password are required."}), 400
+
+    connection = get_db_connection()
+
+    if connection is None:
+        return jsonify({"error": "Database connection failed."}), 500
+
+    cursor = None
+
+    try:
+        cursor = connection.cursor(dictionary=True)
+
+        cursor.execute(
+            "SELECT id, username, password_hash FROM admins WHERE username = %s",
+            (username,)
+        )
+
+        admin = cursor.fetchone()
+
+        if not admin or not check_password_hash(
+            admin["password_hash"], password
+        ):
+            return jsonify({"error": "Invalid username or password."}), 401
+
+        session["admin_id"] = admin["id"]
+
+        return jsonify({
+            "success": True,
+            "message": "Admin login successful."
+        }), 200
+
+    except Exception:
+        app.logger.exception("Admin login failed")
+        return jsonify({"error": "Could not process admin login."}), 500
+
+    finally:
+        if cursor:
+            cursor.close()
+        connection.close()
+
+# =====================================================
 # ADMIN - GET RESTAURANTS
 # =====================================================
 
@@ -576,7 +629,82 @@ def get_restaurants():
             cursor.close()
 
         connection.close()
+# =====================================================
+# ADMIN - DASHBOARD STATISTICS
+# =====================================================
 
+# =====================================================
+# ADMIN - DASHBOARD STATISTICS
+# =====================================================
+
+@app.get("/api/admin/stats")
+def get_admin_stats():
+
+    # Check admin session
+    if not session.get("admin_id"):
+        return jsonify({
+            "error": "Admin login required."
+        }), 401
+
+    connection = get_db_connection()
+
+    if connection is None:
+        return jsonify({
+            "error": "Database connection failed."
+        }), 500
+
+    cursor = None
+
+    try:
+        cursor = connection.cursor(dictionary=True)
+
+        # Total restaurants
+        cursor.execute(
+            "SELECT COUNT(*) AS total FROM restaurants"
+        )
+        total_restaurants = cursor.fetchone()["total"]
+
+        # Total NGOs
+        cursor.execute(
+            "SELECT COUNT(*) AS total FROM ngos"
+        )
+        total_ngos = cursor.fetchone()["total"]
+
+        # Total donations
+        cursor.execute(
+            "SELECT COUNT(*) AS total FROM food_donations"
+        )
+        total_donations = cursor.fetchone()["total"]
+
+        # Completed donations
+        cursor.execute("""
+            SELECT COUNT(*) AS total
+            FROM food_donations
+            WHERE status = 'completed'
+        """)
+        completed_donations = cursor.fetchone()["total"]
+
+        return jsonify({
+            "total_restaurants": total_restaurants,
+            "total_ngos": total_ngos,
+            "total_donations": total_donations,
+            "completed_donations": completed_donations
+        }), 200
+
+    except Exception:
+        app.logger.exception(
+            "Could not fetch admin statistics"
+        )
+
+        return jsonify({
+            "error": "Could not load admin statistics."
+        }), 500
+
+    finally:
+        if cursor:
+            cursor.close()
+
+        connection.close()
 
 # =====================================================
 # LOGGED-IN RESTAURANT DETAILS
@@ -670,29 +798,47 @@ def get_donations():
 
         cursor.execute("""
             SELECT
-                id,
-                food_name,
-                quantity,
-                storage_method,
-                packaging_type,
-                notes,
-                status,
-                created_at
-            FROM food_donations
-            WHERE restaurant_id = %s
-            ORDER BY created_at DESC
+                fd.id,
+                fd.food_name,
+                fd.quantity,
+                fd.storage_method,
+                fd.packaging_type,
+                fd.notes,
+                fd.status,
+                fd.created_at,
+
+                n.ngo_name AS ngo_name,
+                dr.status AS request_status
+
+            FROM food_donations fd
+
+            LEFT JOIN donation_requests dr
+                ON fd.id = dr.donation_id
+                AND dr.status = 'accepted'
+
+            LEFT JOIN ngos n
+                ON dr.ngo_id = n.id
+
+            WHERE fd.restaurant_id = %s
+
+            ORDER BY fd.created_at DESC
         """, (restaurant_id,))
 
         donations = cursor.fetchall()
 
+        for donation in donations:
+            if donation["created_at"]:
+                donation["created_at"] = donation["created_at"].strftime(
+                    "%Y-%m-%d %H:%M:%S"
+                )
+
         return jsonify({
+            "success": True,
             "donations": donations
         }), 200
 
     except Exception:
-        app.logger.exception(
-            "Could not fetch donation history"
-        )
+        app.logger.exception("Could not fetch donation history")
 
         return jsonify({
             "error": "Could not fetch donations."
@@ -703,6 +849,7 @@ def get_donations():
             cursor.close()
 
         connection.close()
+
 
 
 # =====================================================
@@ -982,6 +1129,152 @@ def get_ngo_requests():
 
         return jsonify({
             "error": "Could not fetch donation requests."
+        }), 500
+
+    finally:
+        if cursor:
+            cursor.close()
+
+        connection.close()
+
+# =====================================================
+# NGO ACCEPT / DECLINE DONATION REQUEST
+# =====================================================
+
+@app.post("/api/ngos/requests/<int:request_id>/respond")
+def respond_to_ngo_request(request_id):
+
+    ngo_id = session.get("ngo_id")
+
+    if not ngo_id:
+        return jsonify({
+            "error": "Please log in as an NGO first."
+        }), 401
+
+    data = request.get_json(silent=True) or {}
+    action = data.get("action")
+
+    if action not in ["accepted", "declined"]:
+        return jsonify({
+            "error": "Invalid action. Use accepted or declined."
+        }), 400
+
+  
+
+    connection = get_db_connection()
+
+    if connection is None:
+        return jsonify({
+            "error": "Database connection failed."
+        }), 500
+
+    cursor = None
+
+    try:
+        cursor = connection.cursor(dictionary=True)
+
+        connection.start_transaction()
+
+        # Find and lock this NGO's request
+        cursor.execute("""
+            SELECT id, donation_id, ngo_id, status
+            FROM donation_requests
+            WHERE id = %s AND ngo_id = %s
+            FOR UPDATE
+        """, (request_id, ngo_id))
+
+        donation_request = cursor.fetchone()
+
+        if not donation_request:
+            connection.rollback()
+            return jsonify({
+                "error": "Request not found."
+            }), 404
+
+        if donation_request["status"] != "pending":
+            connection.rollback()
+            return jsonify({
+                "error": "This request has already been processed."
+            }), 409
+
+        if action == "declined":
+
+            cursor.execute("""
+                UPDATE donation_requests
+                SET status = 'declined'
+                WHERE id = %s AND ngo_id = %s
+            """, (request_id, ngo_id))
+
+            connection.commit()
+
+            return jsonify({
+                "success": True,
+                "message": "Donation request declined."
+            }), 200
+
+        # Accept request: lock the donation
+        cursor.execute("""
+            SELECT id, restaurant_id, status
+            FROM food_donations
+            WHERE id = %s
+            FOR UPDATE
+        """, (donation_request["donation_id"],))
+
+        donation = cursor.fetchone()
+
+        if not donation or donation["status"] != "available":
+            connection.rollback()
+            return jsonify({
+                "error": "This donation is no longer available."
+            }), 409
+
+        # Accept this request
+        cursor.execute("""
+            UPDATE donation_requests
+            SET status = 'accepted'
+            WHERE id = %s
+        """, (request_id,))
+
+        # Decline other pending requests for the same donation
+        cursor.execute("""
+            UPDATE donation_requests
+            SET status = 'declined'
+            WHERE donation_id = %s
+              AND id != %s
+              AND status = 'pending'
+        """, (donation_request["donation_id"], request_id))
+
+        # Mark donation as completed
+        cursor.execute("""
+            UPDATE food_donations
+            SET status = 'completed'
+            WHERE id = %s
+        """, (donation_request["donation_id"],))
+
+        # Save donation history
+        cursor.execute("""
+            INSERT INTO donation_history
+            (donation_id, restaurant_id, ngo_id)
+            VALUES (%s, %s, %s)
+        """, (
+            donation_request["donation_id"],
+            donation["restaurant_id"],
+            ngo_id
+        ))
+
+        connection.commit()
+
+        return jsonify({
+            "success": True,
+            "message": "Donation request accepted successfully."
+        }), 200
+
+    except Exception:
+        connection.rollback()
+        app.logger.exception("NGO request response failed")
+
+        return jsonify({
+            "error": "Could not process donation request."
         }), 500
 
     finally:
